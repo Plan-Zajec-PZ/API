@@ -1,0 +1,19 @@
+name: PHP Linting
+
+on: 
+  push:
+    branches-ignore:
+      - 'dependabot/*'
+
+jobs:
+  php-lint:
+    
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Run Pint to find and fix code style issues
+        run: vendor/bin/pint
+      - uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: Automated PHP Linting (Pint)
