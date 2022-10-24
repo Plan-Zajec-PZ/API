@@ -18,8 +18,8 @@ class FacultiesPersister implements ItemProcessorInterface
         $columnsToUpdate = ['name', 'link'];
 
         Faculty::upsert(
-            $faculties, 
-            $findBy, 
+            $faculties,
+            $findBy,
             $columnsToUpdate,
         );
         
