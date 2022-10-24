@@ -22,10 +22,6 @@ class FacultiesSpider extends BasicSpider
         RequestDeduplicationMiddleware::class,
     ];
 
-    public array $spiderMiddleware = [
-        //
-    ];
-
     public array $itemProcessors = [
         FacultiesPersister::class,
     ];
@@ -44,7 +40,7 @@ class FacultiesSpider extends BasicSpider
      */
     public function parse(Response $response): Generator
     {
-        $faculties = $response->filterXPath('//div[contains(@class, "page-sidebar")]//li/a');
+        $faculties = $response->filterXPath('//div[@class="page-sidebar"]//li/a[text()!="Sprawd? obci??enie sali"]');
 
         $results = $faculties->each(fn (Crawler $node) => [
             'name' => $node->text(),
