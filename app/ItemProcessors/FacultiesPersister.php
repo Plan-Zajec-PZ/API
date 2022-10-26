@@ -22,7 +22,7 @@ class FacultiesPersister implements ItemProcessorInterface
             $findBy,
             $columnsToUpdate,
         );
-        
+
         return $item;
     }
 }
