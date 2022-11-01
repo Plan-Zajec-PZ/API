@@ -41,7 +41,7 @@ class FacultiesSpider extends BasicSpider
             'name' => $node->text(),
             'link' => $node->link()->getUri(),
         ]);
-        
+
         yield $this->item($results);
     }
 }
