@@ -19,12 +19,12 @@
 
 4. Generate an app key
 ```
- docker-compose exec php artisan key:generate
+ docker-compose exec php php artisan key:generate
 ```
 
 5. Migrate the database
 ```
- docker-compose exec php artisan migrate
+ docker-compose exec php php artisan migrate
 ```
 
 Now you can access the server at http://localhost:8080/
