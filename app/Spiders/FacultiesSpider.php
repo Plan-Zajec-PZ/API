@@ -31,17 +31,6 @@ class FacultiesSpider extends BasicSpider
         StatsCollectorExtension::class,
     ];
 
-    public function initialRequest(): array
-    {
-        $request = new Request(
-            'GET',
-            config('roach.base_url'),
-            [$this, 'parse']
-        );
-
-        return [$request];
-    }
-
     /**
      * @return Generator<ParseResult>
      */
@@ -53,7 +42,7 @@ class FacultiesSpider extends BasicSpider
             'name' => html_entity_decode($node->text()),
             'link' => $node->link()->getUri(),
         ]);
-
+        dd($results);
         yield $this->item($results);
     }
 }
