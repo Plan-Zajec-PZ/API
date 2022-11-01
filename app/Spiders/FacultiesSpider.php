@@ -38,7 +38,7 @@ class FacultiesSpider extends BasicSpider
         $faculties = $response->filterXPath('//div[@class="page-sidebar"]//li/a[text()!="Sprawd? obci??enie sali"]');
 
         $results = $faculties->each(fn (Crawler $node) => [
-            'name' => html_entity_decode($node->text()),
+            'name' => $node->text(),
             'link' => $node->link()->getUri(),
         ]);
         
