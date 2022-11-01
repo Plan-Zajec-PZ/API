@@ -7,6 +7,7 @@ use Generator;
 use RoachPHP\Downloader\Middleware\RequestDeduplicationMiddleware;
 use RoachPHP\Extensions\LoggerExtension;
 use RoachPHP\Extensions\StatsCollectorExtension;
+use RoachPHP\Http\Request;
 use RoachPHP\Http\Response;
 use RoachPHP\Spider\BasicSpider;
 use RoachPHP\Spider\ParseResult;
@@ -14,9 +15,8 @@ use Symfony\Component\DomCrawler\Crawler;
 
 class FacultiesSpider extends BasicSpider
 {
-    public array $startUrls = [
-        'http://www.plan.pwsz.legnica.edu.pl',
-    ];
+    public int $concurrency = 2;
+    public int $requestDelay = 1;
 
     public array $downloaderMiddleware = [
         RequestDeduplicationMiddleware::class,
@@ -31,19 +31,26 @@ class FacultiesSpider extends BasicSpider
         StatsCollectorExtension::class,
     ];
 
-    public int $concurrency = 2;
+    public function initialRequest(): array
+    {
+        $request = new Request(
+            'GET',
+            config('roach.base_url'),
+            [$this, 'parse']
+        );
 
-    public int $requestDelay = 1;
+        return [$request];
+    }
 
     /**
      * @return Generator<ParseResult>
      */
     public function parse(Response $response): Generator
-    {
+    {   
         $faculties = $response->filterXPath('//div[@class="page-sidebar"]//li/a[text()!="Sprawd? obci??enie sali"]');
 
         $results = $faculties->each(fn (Crawler $node) => [
-            'name' => $node->text(),
+            'name' => html_entity_decode($node->text()),
             'link' => $node->link()->getUri(),
         ]);
 
