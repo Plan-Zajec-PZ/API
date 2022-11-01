@@ -43,5 +43,5 @@ return [
     */
     'default_spider_namespace' => 'App\Spiders',
 
-    'base_url' => env('ROACH_BASE_URL'), 
+    'base_url' => env('ROACH_BASE_URL'),
 ];
