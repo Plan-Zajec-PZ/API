@@ -2,6 +2,7 @@
 
 namespace App\Spiders;
 
+use App\ItemProcessors\LecturersPersister;
 use App\Models\Faculty;
 use Generator;
 use RoachPHP\Downloader\Middleware\RequestDeduplicationMiddleware;
@@ -23,7 +24,7 @@ class LecturersSpider extends BasicSpider
     ];
 
     public array $itemProcessors = [
-        //
+        LecturersPersister::class,
     ];
 
     public array $extensions = [
