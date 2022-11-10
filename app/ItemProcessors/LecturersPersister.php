@@ -17,11 +17,11 @@ class LecturersPersister implements ItemProcessorInterface
         $faculties = $item->all();
 
         foreach ($faculties as $faculty) {
-            $faculty = $this->getFacultyModel($faculty);
+            $facultyModel = $this->getFacultyModel($faculty['facultyName']);
 
             $this->persistLecturers(
                 $faculty['lecturers'],
-                $faculty
+                $facultyModel
             );
         }
 
@@ -36,7 +36,7 @@ class LecturersPersister implements ItemProcessorInterface
     private function persistLecturers(array $lecturers, Faculty $faculty): void
     {
         foreach ($lecturers as $lecturer) {
-            $faculty->lecturers()->updateOrCreate($lecturer);
+            $faculty->lecturers()->updateOrCreate($lecturer, $lecturer);
         }
     }
 }
