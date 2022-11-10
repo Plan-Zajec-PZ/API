@@ -2,7 +2,9 @@
 
 namespace App\ItemProcessors;
 
-use App\Models\Faculty;;
+use App\Models\Faculty;
+
+;
 
 use RoachPHP\ItemPipeline\ItemInterface;
 use RoachPHP\ItemPipeline\Processors\ItemProcessorInterface;
