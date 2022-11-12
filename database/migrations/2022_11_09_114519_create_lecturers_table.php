@@ -16,7 +16,7 @@ return new class () extends Migration {
             $table->id();
             $table->foreignId('faculty_id')->constrained()->cascadeOnDelete();
             $table->string('name', 255);
-            $table->string('link', 255);
+            $table->string('link', 255)->unique();
             $table->timestamps();
         });
     }
