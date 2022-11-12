@@ -34,7 +34,7 @@ class LecturersSpider extends BasicSpider
 
     protected function initialRequests(): array
     {
-        $url = Faculty::query()->where('name', 'Szukaj pracownika')->first()->link;
+        $url = Faculty::whereName('Szukaj pracownika')->first()->link;
 
         return [
             new Request('GET', $url, [$this, 'parse']),
