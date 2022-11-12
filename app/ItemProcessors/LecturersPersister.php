@@ -4,8 +4,6 @@ namespace App\ItemProcessors;
 
 use App\Models\Faculty;
 
-;
-
 use RoachPHP\ItemPipeline\ItemInterface;
 use RoachPHP\ItemPipeline\Processors\ItemProcessorInterface;
 use RoachPHP\Support\Configurable;
@@ -38,7 +36,11 @@ class LecturersPersister implements ItemProcessorInterface
     private function persistLecturers(array $lecturers, Faculty $faculty): void
     {
         foreach ($lecturers as $lecturer) {
-            $faculty->lecturers()->updateOrCreate($lecturer, $lecturer);
+            $findByOrCreateWith = [
+                'link' => $lecturer['link'],
+            ];
+
+            $faculty->lecturers()->updateOrCreate($findByOrCreateWith, $lecturer);
         }
     }
 }
