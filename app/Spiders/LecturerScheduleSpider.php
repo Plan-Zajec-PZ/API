@@ -2,7 +2,6 @@
 
 namespace App\Spiders;
 
-use App\Models\Lecturer;
 use Generator;
 use RoachPHP\Downloader\Middleware\RequestDeduplicationMiddleware;
 use RoachPHP\Extensions\LoggerExtension;
@@ -34,16 +33,14 @@ class LecturerScheduleSpider extends BasicSpider
 
     protected function initialRequests(): array
     {
-        $links = Lecturer::query()->pluck('link');
+        $models = $this->context['models'];
+        $requests = [];
 
-        $requests = $links->map(
-            fn ($link) => new Request(
-                'GET',
-                $link,
-                [$this, 'parse']
-        ));
+        foreach ($models as $model) {
+            $requests[] = new Request('GET', $model->link, [$this, 'parse']);
+        }
 
-        return $requests->toArray();
+        return $requests;
     }
 
     /**
@@ -113,7 +110,7 @@ class LecturerScheduleSpider extends BasicSpider
 
     private function getLessons(Crawler $table, int $index): Crawler
     {
-        $adjustedIndex = $index++;
+        $adjustedIndex = ++$index;
 
         return $table->filterXPath("//tr[position()!=1]//td[@class='x' and position()=${adjustedIndex}]");
     }
