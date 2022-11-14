@@ -41,7 +41,8 @@ class LecturerScheduleSpider extends BasicSpider
                 'GET',
                 $link,
                 [$this, 'parse']
-        ));
+            )
+        );
 
         return $requests->toArray();
     }
