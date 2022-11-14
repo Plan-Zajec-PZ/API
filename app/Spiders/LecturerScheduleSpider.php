@@ -57,6 +57,7 @@ class LecturerScheduleSpider extends BasicSpider
         yield $this->item([
             'schedule' => array_merge(...$schedules),
             'legend' => $this->getLegend($response),
+            'initiatorUri' => $response->getRequest()->getUri(),
         ]);
     }
 
