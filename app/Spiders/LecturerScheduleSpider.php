@@ -2,6 +2,7 @@
 
 namespace App\Spiders;
 
+use App\ItemProcessors\LegendPersister;
 use Generator;
 use RoachPHP\Downloader\Middleware\RequestDeduplicationMiddleware;
 use RoachPHP\Extensions\LoggerExtension;
@@ -23,7 +24,7 @@ class LecturerScheduleSpider extends BasicSpider
     ];
 
     public array $itemProcessors = [
-        //
+        LegendPersister::class,
     ];
 
     public array $extensions = [
