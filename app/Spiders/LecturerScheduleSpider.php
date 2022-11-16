@@ -3,6 +3,7 @@
 namespace App\Spiders;
 
 use App\ItemProcessors\LegendPersister;
+use App\ItemProcessors\SchedulePersister;
 use Generator;
 use RoachPHP\Downloader\Middleware\RequestDeduplicationMiddleware;
 use RoachPHP\Extensions\LoggerExtension;
@@ -25,6 +26,7 @@ class LecturerScheduleSpider extends BasicSpider
 
     public array $itemProcessors = [
         LegendPersister::class,
+        SchedulePersister::class,
     ];
 
     public array $extensions = [
@@ -72,9 +74,11 @@ class LecturerScheduleSpider extends BasicSpider
         $days = $this->getDays($planTable);
         $numberOfDays = $days->count();
 
-        return $days->each(fn (Crawler $day, int $index) => [
+        $schedules = $days->each(fn (Crawler $day, int $index) => [
             $day->text() => $this->getDailySchedule($planTable, $numberOfDays, $index)
         ]);
+
+        return array_merge(...$schedules);
     }
 
     private function getDays(Crawler $table): Crawler

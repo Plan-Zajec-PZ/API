@@ -11,6 +11,10 @@ class Schedule extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'content',
+    ];
+
     public function lecturer(): BelongsTo
     {
         return $this->belongsTo(Lecturer::class);
