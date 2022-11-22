@@ -29,7 +29,7 @@ class SchedulePersister implements ItemProcessorInterface
     private function getScheduleModel(string $initiatorUri): Model
     {
         $lecturer = Lecturer::query()
-            ->where('name', 'DDDD')
+            ->where('link', $initiatorUri)
             ->with('schedule')
             ->firstOrFail();
 
