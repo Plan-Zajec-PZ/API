@@ -30,7 +30,9 @@ class LecturersPersister implements ItemProcessorInterface
 
     private function getFacultyModel(string $facultyName): Faculty
     {
-        return Faculty::firstWhere('name', $facultyName);
+        return Faculty::query()
+            ->where('name', $facultyName)
+            ->firstOrFail();
     }
 
     private function persistLecturers(array $lecturers, Faculty $faculty): void
