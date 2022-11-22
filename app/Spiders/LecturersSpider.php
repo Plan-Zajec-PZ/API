@@ -49,11 +49,12 @@ class LecturersSpider extends BasicSpider
 
     protected function initialRequests(): array
     {
-        $facultyModel = Faculty::query()->firstWhere('name', 'Szukaj pracownika');
-        $url = $facultyModel->link ?? '';
+        $facultyModel = Faculty::query()
+            ->where('name', 'Szukaj pracownika')
+            ->firstOrFail();
 
         return [
-            new Request('GET', $url, [$this, 'parse']),
+            new Request('GET', $facultyModel->link, [$this, 'parse']),
         ];
     }
 
