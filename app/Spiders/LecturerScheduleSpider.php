@@ -34,18 +34,6 @@ class LecturerScheduleSpider extends BasicSpider
         StatsCollectorExtension::class,
     ];
 
-    protected function initialRequests(): array
-    {
-        $models = $this->context['models'];
-        $requests = [];
-
-        foreach ($models as $model) {
-            $requests[] = new Request('GET', $model->link, [$this, 'parse']);
-        }
-
-        return $requests;
-    }
-
     /**
      * @return Generator<ParseResult>
      */
@@ -62,6 +50,19 @@ class LecturerScheduleSpider extends BasicSpider
             'legend' => $this->getLegend($response),
             'initiatorUri' => $response->getRequest()->getUri(),
         ]);
+    }
+
+    protected function initialRequests(): array
+    {
+        $models = $this->context['models'];
+        $requests = [];
+
+        foreach ($models as $model) {
+            $url = $model->link ?? '';
+            $requests[] = new Request('GET', $url, [$this, 'parse']);
+        }
+
+        return $requests;
     }
 
     private function getPlanTables(Response $response): Crawler
