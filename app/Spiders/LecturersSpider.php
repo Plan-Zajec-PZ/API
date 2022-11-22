@@ -32,15 +32,6 @@ class LecturersSpider extends BasicSpider
         StatsCollectorExtension::class,
     ];
 
-    protected function initialRequests(): array
-    {
-        $url = Faculty::whereName('Szukaj pracownika')->first()->link;
-
-        return [
-            new Request('GET', $url, [$this, 'parse']),
-        ];
-    }
-
     /**
      * @return Generator<ParseResult>
      */
@@ -54,6 +45,16 @@ class LecturersSpider extends BasicSpider
         ]);
 
         yield $this->item($results);
+    }
+
+    protected function initialRequests(): array
+    {
+        $facultyModel = Faculty::query()->firstWhere('name', 'Szukaj pracownika');
+        $url = $facultyModel->link ?? '';
+
+        return [
+            new Request('GET', $url, [$this, 'parse']),
+        ];
     }
 
     private function getFacultyName(Crawler $faculty): string
