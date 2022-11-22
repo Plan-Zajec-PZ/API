@@ -40,7 +40,7 @@ class LecturersSpider extends BasicSpider
         $faculties = $response->filterXPath('//ul[@data-role="accordion"]/li');
 
         $results = $faculties->each(fn (Crawler $faculty) => [
-            'facultyName' => $this->getFacultyName($faculty),
+            'facultyName' => $faculty->filterXPath('//a[@href="#"]')->text(),
             'lecturers' => $this->getLecturers($faculty),
         ]);
 
@@ -55,11 +55,6 @@ class LecturersSpider extends BasicSpider
         return [
             new Request('GET', $url, [$this, 'parse']),
         ];
-    }
-
-    private function getFacultyName(Crawler $faculty): string
-    {
-        return $faculty->filterXPath('//a[@href="#"]')->text();
     }
 
     private function getLecturers(Crawler $faculty): array
