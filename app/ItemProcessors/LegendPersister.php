@@ -33,10 +33,11 @@ class LegendPersister implements ItemProcessorInterface
 
     private function getSchedule(string $initiatorUri): Schedule
     {
-        return Lecturer::query()
+        $lecturer = Lecturer::query()
             ->where('link', $initiatorUri)
             ->with(['schedule' => ['legends']])
-            ->first()
-            ->schedule;
+            ->firstOrFail();
+
+        return $lecturer->schedule()->firstOrCreate();
     }
 }
