@@ -25,8 +25,8 @@ class LecturerScheduleSpider extends BasicSpider
     ];
 
     public array $itemProcessors = [
-        LegendPersister::class,
         SchedulePersister::class,
+        LegendPersister::class,
     ];
 
     public array $extensions = [
