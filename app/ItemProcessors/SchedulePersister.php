@@ -2,8 +2,9 @@
 
 namespace App\ItemProcessors;
 
+use App\Exceptions\LecturerNotFound;
 use App\Models\Lecturer;
-use App\Models\Schedule;
+use Illuminate\Database\Eloquent\Model;
 use RoachPHP\ItemPipeline\ItemInterface;
 use RoachPHP\ItemPipeline\Processors\ItemProcessorInterface;
 use RoachPHP\Support\Configurable;
@@ -26,12 +27,17 @@ class SchedulePersister implements ItemProcessorInterface
         return $item;
     }
 
-    private function getScheduleModel(string $initiatorUri): Schedule
+    private function getScheduleModel(string $initiatorUri): Model
     {
-        return Lecturer::query()
+        $lecturer = Lecturer::query()
             ->where('link', $initiatorUri)
             ->with('schedule')
-            ->first()
-            ->schedule;
+            ->first();
+
+        if (! $lecturer) {
+            throw new LecturerNotFound;
+        }
+
+        return $lecturer->schedule()->firstOrCreate();
     }
 }
