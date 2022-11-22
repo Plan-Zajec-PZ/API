@@ -25,11 +25,4 @@ class Lecturer extends Model
     {
         return $this->hasOne(Schedule::class);
     }
-
-    protected static function booted()
-    {
-        static::created(function ($lecturer) {
-            $lecturer->schedule()->create();
-        });
-    }
 }
