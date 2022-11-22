@@ -2,6 +2,7 @@
 
 namespace App\Spiders;
 
+use App\Exceptions\ModelWithoutLink;
 use App\ItemProcessors\LegendPersister;
 use App\ItemProcessors\SchedulePersister;
 use Generator;
@@ -58,7 +59,7 @@ class LecturerScheduleSpider extends BasicSpider
         $requests = [];
 
         foreach ($models as $model) {
-            $url = $model->link ?? '';
+            $url = $model->link ?? throw new ModelWithoutLink;
             $requests[] = new Request('GET', $url, [$this, 'parse']);
         }
 
