@@ -17,11 +17,19 @@ class LecturersPersister implements ItemProcessorInterface
         $faculties = $item->all();
 
         foreach ($faculties as $faculty) {
-            $facultyModel = $this->getFacultyModel($faculty['facultyName']);
+            $facultyModel = $this->getFacultyModel(
+                $faculty['facultyName']
+            );
 
-            $this->persistLecturers(
+            $lecturers = $this->attachFacultyIdTo(
                 $faculty['lecturers'],
-                $facultyModel
+                $facultyModel->id
+            );
+
+            $facultyModel->lecturers()->upsert(
+                $lecturers,
+                ['link'],
+                ['name', 'faculty_id']
             );
         }
 
@@ -35,14 +43,13 @@ class LecturersPersister implements ItemProcessorInterface
             ->firstOrFail();
     }
 
-    private function persistLecturers(array $lecturers, Faculty $faculty): void
+    private function attachFacultyIdTo(array $lecturers, int $facultyId): array
     {
-        foreach ($lecturers as $lecturer) {
-            $findByOrCreateWith = [
-                'link' => $lecturer['link'],
-            ];
+        $callback = fn ($lecturer) => [
+            ...$lecturer,
+            'faculty_id' => $facultyId
+        ];
 
-            $faculty->lecturers()->updateOrCreate($findByOrCreateWith, $lecturer);
-        }
+        return array_map($callback, $lecturers);
     }
 }
