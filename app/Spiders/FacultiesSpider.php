@@ -37,7 +37,7 @@ class FacultiesSpider extends BasicSpider
      */
     public function parse(Response $response): Generator
     {
-        $faculties = $response->filterXPath('//div[@class="page-sidebar"]//li/a[text()!="Sprawd? obci??enie sali"]');
+        $faculties = $response->filterXPath('//div[@class="page-sidebar"]//li/a[not(contains(@href, "show_sala"))]');
 
         $results = $faculties->each(fn (Crawler $node) => [
             'name' => $node->text(),
