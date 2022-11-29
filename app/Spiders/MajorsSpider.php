@@ -41,13 +41,13 @@ class MajorsSpider extends BasicSpider
         $requests = Faculty::query()
             ->whereNot('name', "Szukaj pracownika")
             ->get()
-            ->map(function ($faculty) {
-                return new Request(
+            ->map(
+                fn($faculty) => new Request(
                     'GET',
                     $faculty->link,
                     [$this, 'parse']
-                );
-            });
+                )
+            );
 
         return $requests->toArray();
     }
@@ -60,28 +60,25 @@ class MajorsSpider extends BasicSpider
         $majorNodes = $response->filterXPath('//ul[@data-role="accordion"]/li');
 
         $item = $majorNodes->each(
-            fn (Crawler $majorNode) => $this->createItemFromMajorNode($response->getUri(), $majorNode)
+            fn(Crawler $majorNode) => [
+                'major_name' => $majorNode->filterXPath('//a')->text(),
+                'major_specializations' => $this->getSpecializationsFromFacultyPage($majorNode),
+                'faculty_page_link' => $response->getUri(),
+            ]
         );
 
         yield $this->item($item);
     }
 
-    private function createItemFromMajorNode(String $facultyPageLink, Crawler $majorNode): array
-    {
-        return [
-            'major_name' => $majorNode->filterXPath('//a')->text(),
-            'major_specializations' => $this->getSpecializationsFromFacultyPage($majorNode),
-            'faculty_page_link' => $facultyPageLink,
-        ];
-    }
-
     private function getSpecializationsFromFacultyPage(Crawler $major): array
     {
-        $specializations = $major->filterXPath('//div/a[not(contains(@href, "checkSpecjalnoscStac"))]');
+        $specializationNodes = $major->filterXPath('//div/a[not(contains(@href, "checkSpecjalnoscStac"))]');
 
-        return $specializations->each(fn (Crawler $specializations) => [
-            'name' => $specializations->text(),
-            'link' => $specializations->nextAll()->first()->link()->getUri(),
-        ]);
+        return $specializationNodes->each(
+            fn(Crawler $node) => [
+                'name' => $node->text(),
+                'link' => $node->nextAll()->first()->link()->getUri(),
+            ]
+        );
     }
 }
