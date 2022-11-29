@@ -42,7 +42,7 @@ class MajorsSpider extends BasicSpider
             ->whereNot('name', "Szukaj pracownika")
             ->get()
             ->map(
-                fn($faculty) => new Request(
+                fn ($faculty) => new Request(
                     'GET',
                     $faculty->link,
                     [$this, 'parse']
@@ -60,7 +60,7 @@ class MajorsSpider extends BasicSpider
         $majorNodes = $response->filterXPath('//ul[@data-role="accordion"]/li');
 
         $item = $majorNodes->each(
-            fn(Crawler $majorNode) => [
+            fn (Crawler $majorNode) => [
                 'major_name' => $majorNode->filterXPath('//a')->text(),
                 'major_specializations' => $this->getSpecializationsFromFacultyPage($majorNode),
                 'faculty_page_link' => $response->getUri(),
@@ -75,7 +75,7 @@ class MajorsSpider extends BasicSpider
         $specializationNodes = $major->filterXPath('//div/a[not(contains(@href, "checkSpecjalnoscStac"))]');
 
         return $specializationNodes->each(
-            fn(Crawler $node) => [
+            fn (Crawler $node) => [
                 'name' => $node->text(),
                 'link' => $node->nextAll()->first()->link()->getUri(),
             ]
