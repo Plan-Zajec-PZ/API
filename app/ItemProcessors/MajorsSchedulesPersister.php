@@ -65,11 +65,10 @@ class MajorsSchedulesPersister implements ItemProcessorInterface
             $group = Group::firstOrNew([
                 'name' => $itemGroup,
             ]);
-
             $group->specialization()->associate($specialization);
-            $group->groupSchedule()->firstOrCreate();
-
             $group->save();
+
+            $group->groupSchedule()->firstOrCreate();
         }
     }
 
