@@ -53,45 +53,59 @@ class MajorSchedulesSpider extends BasicSpider
      */
     public function parse(Response $response): Generator
     {
-        $scheduleTable = $this->getScheduleTable($response);
+        $scheduleTableNode = $this->getScheduleTable($response);
 
-        $groups = $this->getGroupsFromSchedule($scheduleTable);
-        $days = $scheduleTable->filter('tr > td.nazwaDnia');
+        $dayNodes = $this->getDayNodesFromScheduleTableNode($scheduleTableNode);
+        $groups = $this->getGroupsFromScheduleTableNode($scheduleTableNode);
 
-        $dailySchedules = $days->each(fn (Crawler $day) => [
-            'day' => $day->text(),
-            'schedule' => $this->getDailySchedule($day, $groups),
+        $dailySchedules = $dayNodes->each(
+            fn(Crawler $node) => [
+                'day' => $node->text(),
+                'schedule' => $this->getDailySchedule($node, $groups),
+            ]
+        );
+
+        yield $this->item([
+            'specialization_page_link' => $response->getUri(),
+            'groups' => $groups,
+            'dailySchedules' => $dailySchedules,
         ]);
-
-        $result['specialization_page_link'] = $response->getUri();
-        $result['groups'] = $groups;
-        $result['dailySchedules'] = $dailySchedules;
-
-
-        yield $this->item($result);
     }
 
     private function getScheduleTable(Response $response): Crawler
     {
         return $response
-            ->filter('table.TabPlan:first-of-type ')
+            ->filter('table.TabPlan')
             ->first();
     }
 
-    private function getGroupsFromSchedule(Crawler $scheduleTable): array
+    private function getDayNodesFromScheduleTableNode(Crawler $scheduleTableNode): Crawler
     {
-        return $scheduleTable
+        return $scheduleTableNode->filter('tr > td.nazwaDnia');
+    }
+
+    private function getGroupsFromScheduleTableNode(Crawler $scheduleTableNode): array
+    {
+        return $scheduleTableNode
             ->filter('tr:first-of-type > td.nazwaSpecjalnosci')
             ->each(
-                fn (Crawler $node) => $node->text()
+                fn(Crawler $node) => $node->text()
             );
     }
 
-    private function getDailySchedule(Crawler $day, $groups): array
+    private function getDailySchedule(Crawler $dayNode, $groups): array
     {
-        $hoursNode = $day->closest('tr')->siblings()->children('td.godzina');
-        $hours = $hoursNode->each(fn (Crawler $node) => $node->text());
-        $subjects = $hoursNode->each(fn (Crawler $hour) => $hour->nextAll()->each(fn (Crawler $tr) => $tr->text()));
+        $hoursNode = $dayNode->closest('tr')->siblings()->children('td.godzina');
+
+        $hours = $hoursNode->each(
+            fn(Crawler $hour) => $hour->text()
+        );
+
+        $subjects = $hoursNode->each(
+            fn(Crawler $hour) => $hour->nextAll()->each(
+                fn(Crawler $tr) => $tr->text()
+            )
+        );
 
         foreach ($subjects as &$value) {
             $value = array_chunk($value, 3);
