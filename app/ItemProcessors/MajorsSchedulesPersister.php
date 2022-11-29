@@ -15,7 +15,7 @@ class MajorsSchedulesPersister implements ItemProcessorInterface
     public function processItem(ItemInterface $item): ItemInterface
     {
         $groups = $item->all()['groups'];
-        $specialization = Specialization::firstWhere('link', $item->all()['specialization_page_link'],);
+        $specialization = Specialization::firstWhere('link', $item->all()['specialization_page_link'], );
         $majorScheduleItems = $item->all()['dailySchedules'];
 
         foreach ($majorScheduleItems as &$majorScheduleItem) {

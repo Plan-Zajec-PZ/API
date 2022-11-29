@@ -58,7 +58,7 @@ class MajorSchedulesSpider extends BasicSpider
         $groups = $this->getGroupsFromSchedule($scheduleTable);
         $days = $scheduleTable->filter('tr > td.nazwaDnia');
 
-        $dailySchedules = $days->each(fn(Crawler $day) => [
+        $dailySchedules = $days->each(fn (Crawler $day) => [
             'day' => $day->text(),
             'schedule' => $this->getDailySchedule($day, $groups),
         ]);
@@ -83,15 +83,15 @@ class MajorSchedulesSpider extends BasicSpider
         return $scheduleTable
             ->filter('tr:first-of-type > td.nazwaSpecjalnosci')
             ->each(
-                fn(Crawler $node) => $node->text()
+                fn (Crawler $node) => $node->text()
             );
     }
 
     private function getDailySchedule(Crawler $day, $groups): array
     {
         $hoursNode = $day->closest('tr')->siblings()->children('td.godzina');
-        $hours = $hoursNode->each(fn(Crawler $node) => $node->text());
-        $subjects = $hoursNode->each(fn(Crawler $hour) => $hour->nextAll()->each(fn(Crawler $tr) => $tr->text()));
+        $hours = $hoursNode->each(fn (Crawler $node) => $node->text());
+        $subjects = $hoursNode->each(fn (Crawler $hour) => $hour->nextAll()->each(fn (Crawler $tr) => $tr->text()));
 
         foreach ($subjects as &$value) {
             $value = array_chunk($value, 3);
