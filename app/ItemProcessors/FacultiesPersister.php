@@ -17,7 +17,7 @@ class FacultiesPersister implements ItemProcessorInterface
         $findBy = ['name', 'link'];
         $columnsToUpdate = ['name', 'link'];
 
-        Faculty::upsert(
+        Faculty::query()->upsert(
             $faculties,
             $findBy,
             $columnsToUpdate,

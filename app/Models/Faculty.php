@@ -15,6 +15,11 @@ class Faculty extends Model
         'link',
     ];
 
+    public function lecturers(): HasMany
+    {
+        return $this->hasMany(Lecturer::class);
+    }
+
     public function majors(): HasMany
     {
         return $this->hasMany(Major::class);

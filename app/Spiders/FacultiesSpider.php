@@ -3,6 +3,7 @@
 namespace App\Spiders;
 
 use App\ItemProcessors\FacultiesPersister;
+use App\SpiderMiddlewares\ResponseEncodingCorrection;
 use Generator;
 use RoachPHP\Downloader\Middleware\RequestDeduplicationMiddleware;
 use RoachPHP\Extensions\LoggerExtension;
@@ -19,6 +20,7 @@ class FacultiesSpider extends BasicSpider
 
     public array $downloaderMiddleware = [
         RequestDeduplicationMiddleware::class,
+        ResponseEncodingCorrection::class,
     ];
 
     public array $itemProcessors = [
@@ -35,7 +37,7 @@ class FacultiesSpider extends BasicSpider
      */
     public function parse(Response $response): Generator
     {
-        $faculties = $response->filterXPath('//div[@class="page-sidebar"]//li/a[text()!="Sprawd? obci??enie sali"]');
+        $faculties = $response->filterXPath('//div[@class="page-sidebar"]//li/a[not(contains(@href, "show_sala"))]');
 
         $results = $faculties->each(fn (Crawler $node) => [
             'name' => $node->text(),
