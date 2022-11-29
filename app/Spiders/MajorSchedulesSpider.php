@@ -4,7 +4,6 @@ namespace App\Spiders;
 
 use App\ItemProcessors\MajorsSchedulesPersister;
 use App\Models\Specialization;
-use App\SpiderMiddlewares\ResponseEncodingCorrection;
 use Generator;
 use RoachPHP\Downloader\Middleware\RequestDeduplicationMiddleware;
 use RoachPHP\Extensions\LoggerExtension;
@@ -19,7 +18,6 @@ class MajorSchedulesSpider extends BasicSpider
 {
     public array $downloaderMiddleware = [
         RequestDeduplicationMiddleware::class,
-        ResponseEncodingCorrection::class,
     ];
 
     public array $itemProcessors = [
