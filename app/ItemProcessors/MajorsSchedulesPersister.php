@@ -18,10 +18,6 @@ class MajorsSchedulesPersister implements ItemProcessorInterface
         $specialization = Specialization::firstWhere('link', $item['specialization_page_link']);
         $majorScheduleItems = $item['dailySchedules'];
 
-        foreach ($majorScheduleItems as &$majorScheduleItem) {
-            $majorScheduleItem['schedule'] = $this->getGroupDailySchedules($groups, $majorScheduleItem['schedule']);
-        }
-
         $majorScheduleItems = $this->getGroupSchedules($groups, $majorScheduleItems);
 
         $this->persistGroups($groups, $specialization);
@@ -29,34 +25,18 @@ class MajorsSchedulesPersister implements ItemProcessorInterface
         return $item;
     }
 
-    public function getGroupDailySchedules($groups, $dailySchedule): array
-    {
-        $new = [];
-        foreach ($groups as $group) {
-            $new[$group] = [];
-            $hours = [];
-            foreach ($dailySchedule as $hour => $value) {
-                $hours[$hour] = $value[$group];
-            }
-            $new[$group] = $hours;
-        }
-
-        return $new;
-    }
-
     public function getGroupSchedules($groups, $schedule): array
     {
-        $new = [];
+        $result = [];
+
         foreach ($groups as $group) {
-            $new[$group] = [];
-            $days = [];
-            foreach ($schedule as $day) {
-                $days[$day['day']] = $day['schedule'][$group];
-            }
-            $new[$group] = $days;
+            $result[$group] = array_combine(
+                array_column($schedule, 'day'),
+                array_column(array_column($schedule, 'schedule'), $group)
+            );
         }
 
-        return $new;
+        return $result;
     }
 
     public function persistGroups($itemGroups, $specialization)

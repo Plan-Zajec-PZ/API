@@ -109,9 +109,19 @@ class MajorSchedulesSpider extends BasicSpider
 
         foreach ($subjects as &$value) {
             $value = array_chunk($value, 3);
-            $value = array_combine($groups, $value);
         }
 
-        return array_combine($hours, $subjects);
+        $result = [];
+        $schedule = array_values($subjects);
+
+        foreach ($groups as $index => $group) {
+            $groupSchedule = array_column($schedule, $index);
+            $result[$group] = array_combine(
+                $hours,
+                $groupSchedule
+            );
+        }
+
+        return $result;
     }
 }
