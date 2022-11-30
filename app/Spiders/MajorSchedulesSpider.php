@@ -2,6 +2,7 @@
 
 namespace App\Spiders;
 
+use App\ItemProcessors\GroupsPersister;
 use App\ItemProcessors\MajorsSchedulesPersister;
 use App\Models\Specialization;
 use Generator;
@@ -21,6 +22,7 @@ class MajorSchedulesSpider extends BasicSpider
     ];
 
     public array $itemProcessors = [
+        GroupsPersister::class,
         MajorsSchedulesPersister::class
     ];
 
@@ -68,7 +70,7 @@ class MajorSchedulesSpider extends BasicSpider
         yield $this->item([
             'specialization_page_link' => $response->getUri(),
             'groups' => $groups,
-            'dailySchedules' => $dailySchedules,
+            'dailySchedules' => $this->createGroupScheduleFromDailySchedule($dailySchedules, $groups),
         ]);
     }
 
@@ -122,6 +124,21 @@ class MajorSchedulesSpider extends BasicSpider
             );
         }
 
+        return $result;
+    }
+
+    private function createGroupScheduleFromDailySchedule($dailySchedules, $groups): array
+    {
+        $result = [];
+        $days = array_column($dailySchedules, 'day');
+        $schedules = array_column($dailySchedules, 'schedule');
+        foreach ($groups as $group) {
+            $groupSchedule = array_column($schedules, $group);
+            $result[$group] = array_combine(
+                $days,
+                $groupSchedule,
+            );
+        }
         return $result;
     }
 }
