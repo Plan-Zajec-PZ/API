@@ -38,7 +38,7 @@ class MajorSchedulesSpider extends BasicSpider
     {
         $requests = Specialization::all()
             ->map(
-                fn($specialization) => new Request(
+                fn ($specialization) => new Request(
                     'GET',
                     $specialization->link,
                     [$this, 'parse']
@@ -59,7 +59,7 @@ class MajorSchedulesSpider extends BasicSpider
         $groups = $this->getGroupsFromScheduleTableNode($scheduleTableNode);
 
         $dailySchedules = $dayNodes->each(
-            fn(Crawler $node) => [
+            fn (Crawler $node) => [
                 'day' => $node->text(),
                 'schedule' => $this->getDailySchedule($node, $groups),
             ]
@@ -89,7 +89,7 @@ class MajorSchedulesSpider extends BasicSpider
         return $scheduleTableNode
             ->filter('tr:first-of-type > td.nazwaSpecjalnosci')
             ->each(
-                fn(Crawler $node) => $node->text()
+                fn (Crawler $node) => $node->text()
             );
     }
 
@@ -98,12 +98,12 @@ class MajorSchedulesSpider extends BasicSpider
         $hoursNode = $dayNode->closest('tr')->siblings()->children('td.godzina');
 
         $hours = $hoursNode->each(
-            fn(Crawler $hour) => $hour->text()
+            fn (Crawler $hour) => $hour->text()
         );
 
         $subjects = $hoursNode->each(
-            fn(Crawler $hour) => $hour->nextAll()->each(
-                fn(Crawler $tr) => $tr->text()
+            fn (Crawler $hour) => $hour->nextAll()->each(
+                fn (Crawler $tr) => $tr->text()
             )
         );
 
