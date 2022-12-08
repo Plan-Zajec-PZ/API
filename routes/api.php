@@ -19,5 +19,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('/lecturers', [LecturerController::class, 'index']);
-Route::get('/lecturers/{lecturer}', [LecturerController::class, 'show']);
+Route::controller(LecturerController::class)->group(function () {
+    Route::get('/lecturers', 'index')->name('lecturer.index');
+    Route::get('/lecturers/{lecturer}', 'show')->name('lecturer.show');
+});
