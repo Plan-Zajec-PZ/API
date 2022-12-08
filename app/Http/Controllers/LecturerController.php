@@ -22,9 +22,9 @@ class LecturerController extends Controller
 
     private function buildCallback(?int $facultyId): \Closure
     {
-        $whenCallback = fn($query) => $query->where('faculty_id', $facultyId);
+        $whenCallback = fn ($query) => $query->where('faculty_id', $facultyId);
 
-        return fn() => Lecturer::query()
+        return fn () => Lecturer::query()
             ->when($facultyId, $whenCallback)
             ->pluck('name', 'id');
     }
