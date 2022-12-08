@@ -10,6 +10,7 @@ services:
             - .:/var/www
         ports:
             - "9000:9000"
+        restart: unless-stopped
         networks:
             - schedule_api
 
@@ -24,6 +25,7 @@ services:
         depends_on:
             - php
             - database
+        restart: unless-stopped
         networks:
             - schedule_api
 
