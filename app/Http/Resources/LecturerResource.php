@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Models\Schedule;
 use App\Spiders\LecturerScheduleSpider;
 use Illuminate\Http\Resources\Json\JsonResource;
 use RoachPHP\Roach;
@@ -19,17 +20,19 @@ class LecturerResource extends JsonResource
         ];
     }
 
-    private function scrapSchedule(): array
+    private function scrapSchedule(): Schedule
     {
         $context = [
             'models' => [$this->resource]
         ];
 
-        $collected = Roach::collectSpider(
+        Roach::collectSpider(
             LecturerScheduleSpider::class,
             context: $context
         );
 
-        return $collected[0]->get('schedule');
+        $this->resource->refresh();
+
+        return $this->schedule;
     }
 }
