@@ -41,7 +41,7 @@ class RetrieveLecturersAction
             return $query->where('faculty_id', $this->facultyId);
         };
 
-        return fn() => Lecturer::query()
+        return fn () => Lecturer::query()
             ->when($this->facultyId, $callback)
             ->pluck('name', 'id');
     }
