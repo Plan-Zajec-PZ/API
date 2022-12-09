@@ -1,5 +1,7 @@
 FROM php:8.1-fpm
 
+ENV TZ=Europe/Warsaw
+
 WORKDIR /var/www
 
 RUN apt-get update && apt-get install -y \
