@@ -38,7 +38,7 @@ services:
         ports:
             - "3306:3306"
         volumes:
-            - ./docker/db-data:/var/lib/db-data
+            - db-data:/var/lib/mysql
         environment:
             MYSQL_DATABASE: schedule
             MYSQL_ROOT_PASSWORD: password
@@ -47,3 +47,7 @@ services:
 
 networks:
     schedule_api:
+
+volumes:
+    db-data:
+        driver: local
