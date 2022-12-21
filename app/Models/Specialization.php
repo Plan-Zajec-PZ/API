@@ -25,4 +25,9 @@ class Specialization extends Model
     {
         return $this->hasOne(AbbreviationLegend::class);
     }
+
+    public function subjectLegend(): HasOne
+    {
+        return $this->hasOne(SubjectLegend::class);
+    }
 }
