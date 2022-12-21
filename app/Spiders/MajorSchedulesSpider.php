@@ -2,8 +2,10 @@
 
 namespace App\Spiders;
 
+use App\ItemProcessors\AbbreviationLegendsPersister;
 use App\ItemProcessors\GroupsPersister;
 use App\ItemProcessors\MajorsSchedulesPersister;
+use App\ItemProcessors\SubjectLegendsPersister;
 use App\Models\Specialization;
 use Generator;
 use RoachPHP\Downloader\Middleware\RequestDeduplicationMiddleware;
@@ -56,10 +58,11 @@ class MajorSchedulesSpider extends BasicSpider
     public function parse(Response $response): Generator
     {
         $scheduleTableNode = $this->getScheduleTable($response);
+        $abbreviationLegend = $this->getAbbreviationLegend($response);
+        $subjectLegends = $this->getSubjectLegends($response);
 
         $dayNodes = $this->getDayNodesFromScheduleTableNode($scheduleTableNode);
         $groups = $this->getGroupsFromScheduleTableNode($scheduleTableNode);
-
         $dailySchedules = $dayNodes->each(
             fn (Crawler $node) => [
                 'day' => $node->text(),
@@ -70,6 +73,8 @@ class MajorSchedulesSpider extends BasicSpider
         yield $this->item([
             'specialization_page_link' => $response->getUri(),
             'groups' => $groups,
+            'abbreviationLegend' => $abbreviationLegend,
+            'subjectLegends' => $subjectLegends,
             'dailySchedules' => $this->createGroupScheduleFromDailySchedule($dailySchedules, $groups),
         ]);
     }
@@ -79,6 +84,46 @@ class MajorSchedulesSpider extends BasicSpider
         return $response
             ->filter('table.TabPlan')
             ->first();
+    }
+
+    private function getAbbreviationLegend(Response $response): array
+    {
+        $rowsNode = $response
+            ->filter('#prtleg > table.TabPlan tr');
+
+        $abbreviations = $rowsNode
+            ->filter('td:nth-child(2n+1)')
+            ->each(
+                fn (Crawler $node) => $node->text()
+            );
+        $names = $rowsNode
+            ->filter('td:nth-child(2n)')
+            ->each(
+                fn (Crawler $node) => $node->text()
+            );
+
+        return array_combine($abbreviations, $names);
+    }
+
+    private function getSubjectLegends(Response $response): array
+    {
+        $subjectLegendTables = $response->filter( 'table table');
+        $subjectLegendTableNames = [];
+        $subjectLegendTablesContent = $subjectLegendTables->each(
+            function (Crawler $node) use (&$subjectLegendTableNames){
+                $subjectLegendTableNames[] =  $node->filter( 'tr:first-of-type > th')->text();
+                return $node->filter( 'tr:not(:nth-child(2)) > td')->each(
+                    fn (Crawler $node) => $node->text()
+                );
+            }
+        );
+        $subjectLegendTablesContent = array_combine($subjectLegendTableNames, $subjectLegendTablesContent);
+
+        foreach ($subjectLegendTablesContent as &$value) {
+            $value = array_chunk($value, 3);
+        }
+
+        return $subjectLegendTablesContent;
     }
 
     private function getDayNodesFromScheduleTableNode(Crawler $scheduleTableNode): Crawler
@@ -95,7 +140,7 @@ class MajorSchedulesSpider extends BasicSpider
             );
     }
 
-    private function getDailySchedule(Crawler $dayNode, $groups): array
+    private function getDailySchedule(Crawler $dayNode, array $groups): array
     {
         $hoursNode = $dayNode->closest('tr')->siblings()->children('td.godzina');
 
@@ -127,7 +172,7 @@ class MajorSchedulesSpider extends BasicSpider
         return $result;
     }
 
-    private function createGroupScheduleFromDailySchedule($dailySchedules, $groups): array
+    private function createGroupScheduleFromDailySchedule(array $dailySchedules, array $groups): array
     {
         $result = [];
         $days = array_column($dailySchedules, 'day');
