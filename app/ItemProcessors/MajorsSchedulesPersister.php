@@ -20,7 +20,7 @@ class MajorsSchedulesPersister implements ItemProcessorInterface
         return $item;
     }
 
-    public function persistGroupSchedules($majorScheduleItems)
+    public function persistGroupSchedules(array $majorScheduleItems): void
     {
         foreach ($majorScheduleItems as $group => $majorScheduleItem) {
             $group = Group::firstWhere([
