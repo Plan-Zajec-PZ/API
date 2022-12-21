@@ -25,7 +25,9 @@ class MajorSchedulesSpider extends BasicSpider
 
     public array $itemProcessors = [
         GroupsPersister::class,
-        MajorsSchedulesPersister::class
+        MajorsSchedulesPersister::class,
+        AbbreviationLegendsPersister::class,
+        SubjectLegendsPersister::class,
     ];
 
     public array $extensions = [
