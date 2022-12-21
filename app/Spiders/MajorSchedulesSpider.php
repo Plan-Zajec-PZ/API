@@ -109,12 +109,12 @@ class MajorSchedulesSpider extends BasicSpider
 
     private function getSubjectLegends(Response $response): array
     {
-        $subjectLegendTables = $response->filter( 'table table');
+        $subjectLegendTables = $response->filter('table table');
         $subjectLegendTableNames = [];
         $subjectLegendTablesContent = $subjectLegendTables->each(
-            function (Crawler $node) use (&$subjectLegendTableNames){
-                $subjectLegendTableNames[] =  $node->filter( 'tr:first-of-type > th')->text();
-                return $node->filter( 'tr:not(:nth-child(2)) > td')->each(
+            function (Crawler $node) use (&$subjectLegendTableNames) {
+                $subjectLegendTableNames[] =  $node->filter('tr:first-of-type > th')->text();
+                return $node->filter('tr:not(:nth-child(2)) > td')->each(
                     fn (Crawler $node) => $node->text()
                 );
             }

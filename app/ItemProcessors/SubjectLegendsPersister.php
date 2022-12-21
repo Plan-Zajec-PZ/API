@@ -23,7 +23,7 @@ class SubjectLegendsPersister implements ItemProcessorInterface
 
     public function persistSubjectLegends(array $subjectLegends, string $specializationPageLink): void
     {
-        if(!empty($subjectLegends)) {
+        if (!empty($subjectLegends)) {
             $specialization = Specialization::firstWhere([
                 'link' => $specializationPageLink,
             ]);

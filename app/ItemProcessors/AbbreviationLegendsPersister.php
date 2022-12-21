@@ -37,4 +37,3 @@ class AbbreviationLegendsPersister implements ItemProcessorInterface
         }
     }
 }
-
