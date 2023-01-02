@@ -1,0 +1,36 @@
+<?php
+
+namespace App\ItemProcessors;
+
+use App\Models\Group;
+use RoachPHP\ItemPipeline\ItemInterface;
+use RoachPHP\ItemPipeline\Processors\ItemProcessorInterface;
+use RoachPHP\Support\Configurable;
+
+class MajorsSchedulesPersister implements ItemProcessorInterface
+{
+    use Configurable;
+
+    public function processItem(ItemInterface $item): ItemInterface
+    {
+        $majorScheduleItems = $item['dailySchedules'];
+
+        $this->persistGroupSchedules($majorScheduleItems);
+
+        return $item;
+    }
+
+    private function persistGroupSchedules(array $majorScheduleItems): void
+    {
+        foreach ($majorScheduleItems as $group => $majorScheduleItem) {
+            $group = Group::query()
+                ->firstWhere(['name' => $group]);
+
+            $groupSchedule = $group->groupSchedule();
+
+            $groupSchedule->update([
+                'content' => json_encode($majorScheduleItem)
+            ]);
+        }
+    }
+}
