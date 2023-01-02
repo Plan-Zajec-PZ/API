@@ -15,7 +15,7 @@ class GroupsPersister implements ItemProcessorInterface
     public function processItem(ItemInterface $item): ItemInterface
     {
         $groups = $item['groups'];
-        $specialization = Specialization::firstWhere('link', $item['specialization_page_link']);
+        $specialization = Specialization::query()->firstWhere('link', $item['specialization_page_link']);
 
         $this->persistGroups($groups, $specialization);
 
@@ -25,11 +25,11 @@ class GroupsPersister implements ItemProcessorInterface
     public function persistGroups($itemGroups, $specialization)
     {
         foreach ($itemGroups as $itemGroup) {
-            $group = Group::firstOrNew([
-                'name' => $itemGroup,
-            ]);
+            $group = Group::query()
+                ->firstOrNew(['name' => $itemGroup]);
 
             $group->specialization()->associate($specialization);
+
             $group->save();
 
             $group->groupSchedule()->firstOrCreate();

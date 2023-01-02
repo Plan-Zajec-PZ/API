@@ -24,11 +24,15 @@ class SubjectLegendsPersister implements ItemProcessorInterface
     public function persistSubjectLegends(array $subjectLegends, string $specializationPageLink): void
     {
         if (!empty($subjectLegends)) {
-            $specialization = Specialization::firstWhere([
+            $specialization = Specialization::query()->firstWhere([
                 'link' => $specializationPageLink,
             ]);
 
-            $subjectLegend = SubjectLegend::firstOrNew(['content' => json_encode($subjectLegends), 'specialization_id' => $specialization->id]);
+            $subjectLegend = SubjectLegend::query()
+                ->firstOrNew([
+                    'content' => json_encode($subjectLegends),
+                    'specialization_id' => $specialization->id,
+                ]);
 
             $subjectLegend->specialization()->associate($specialization);
 
