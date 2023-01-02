@@ -42,7 +42,8 @@ class MajorSchedulesSpider extends BasicSpider
     /** @return Request[] */
     protected function initialRequests(): array
     {
-        $requests = Specialization::all()
+        $requests = Specialization::query()
+            ->all()
             ->map(
                 fn($specialization) => new Request(
                     'GET',
