@@ -1,6 +1,6 @@
 <?php
 
-use Illuminate\Http\Request;
+use App\Http\Controllers\LecturerController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::controller(LecturerController::class)->group(function () {
+    Route::get('/lecturers', 'index')->name('lecturer.index');
+    Route::get('/lecturers/{lecturer}', 'show')->name('lecturer.show');
 });
