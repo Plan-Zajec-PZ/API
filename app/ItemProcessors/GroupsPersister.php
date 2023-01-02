@@ -22,7 +22,7 @@ class GroupsPersister implements ItemProcessorInterface
         return $item;
     }
 
-    public function persistGroups($itemGroups, $specialization)
+    private function persistGroups($itemGroups, $specialization)
     {
         foreach ($itemGroups as $itemGroup) {
             $group = Group::query()

@@ -22,7 +22,7 @@ class AbbreviationLegendsPersister implements ItemProcessorInterface
         return $item;
     }
 
-    public function persistAbbreviationLegend(array $abbreviationLegendItem, string $specializationPageLink): void
+    private function persistAbbreviationLegend(array $abbreviationLegendItem, string $specializationPageLink): void
     {
         foreach ($abbreviationLegendItem as $abbreviation => $name) {
             $abbreviationLegend = AbbreviationLegend::query()

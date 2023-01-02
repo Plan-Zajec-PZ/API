@@ -21,7 +21,7 @@ class SubjectLegendsPersister implements ItemProcessorInterface
         return $item;
     }
 
-    public function persistSubjectLegends(array $subjectLegends, string $specializationPageLink): void
+    private function persistSubjectLegends(array $subjectLegends, string $specializationPageLink): void
     {
         if (!empty($subjectLegends)) {
             $specialization = Specialization::query()->firstWhere([
