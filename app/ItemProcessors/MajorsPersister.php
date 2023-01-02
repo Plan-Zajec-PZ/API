@@ -28,12 +28,12 @@ class MajorsPersister implements ItemProcessorInterface
 
     private function getFacultyByPageLink(string $link): Faculty
     {
-        return Faculty::firstWhere('link', $link);
+        return Faculty::query()->firstWhere('link', $link);
     }
 
     private function persistMajor(array $majorItem, Faculty $faculty): Major
     {
-        $major = Major::firstOrNew(['name' => $majorItem['major_name']]);
+        $major = Major::query()->firstOrNew(['name' => $majorItem['major_name']]);
         $major->faculty()->associate($faculty);
 
         $major->save();
@@ -44,10 +44,11 @@ class MajorsPersister implements ItemProcessorInterface
     private function persistSpecializations(array $majorItemSpecializations, Major $major): void
     {
         foreach ($majorItemSpecializations as $majorItemSpecialization) {
-            $specialization = Specialization::firstOrNew([
-                'name' => $majorItemSpecialization['name'],
-                'link' => $majorItemSpecialization['link'],
-            ]);
+            $specialization = Specialization::query()
+                ->firstOrNew([
+                    'name' => $majorItemSpecialization['name'],
+                    'link' => $majorItemSpecialization['link'],
+                ]);
             $specialization->major()->associate($major);
 
             $specialization->save();
