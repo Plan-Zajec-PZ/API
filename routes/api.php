@@ -20,6 +20,9 @@ Route::controller(LecturerController::class)->group(function () {
     Route::get('/lecturers/{lecturer}', 'show')->name('lecturer.show');
 });
 
-Route::controller(FacultyController::class)->group(function () {
-    Route::get('/faculties', 'index')->name('faculties.index');
+Route::prefix('faculties')->group(function () {
+    Route::controller(FacultyController::class)->group(function () {
+        Route::get('/', 'index')->name('faculties.index');
+        Route::get('/{faculty}', 'show')->name('faculties.show');
+    });
 });
