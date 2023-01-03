@@ -15,6 +15,6 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::controller(LecturerController::class)->group(function () {
-    Route::get('/lecturers', 'index')->name('lecturer.index');
-    Route::get('/lecturers/{lecturer}', 'show')->name('lecturer.show');
+    Route::get('/lecturers', 'index')->name('lecturers.index');
+    Route::get('/lecturers/{lecturer}', 'show')->name('lecturers.show');
 });
