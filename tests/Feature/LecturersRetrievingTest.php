@@ -48,6 +48,7 @@ class LecturersRetrievingTest extends TestCase
     public function testRequestWithInvalidFacultyIdIsRejected()
     {
         Faculty::query()->delete();
+        $this->assertDatabaseEmpty('faculties');
 
         $route = route('lecturers.index', [
             'faculty' => random_int(1, 100)
