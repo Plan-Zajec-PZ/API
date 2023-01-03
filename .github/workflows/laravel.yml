@@ -9,7 +9,6 @@ jobs:
     services:
       database:
         image: mariadb:latest
-        command: --default-authentication-plugin=mysql_native_password
         env:
           MYSQL_DATABASE: schedule
           MYSQL_ROOT_PASSWORD: password
