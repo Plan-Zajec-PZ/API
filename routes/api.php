@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\LecturerController;
 use App\Http\Controllers\FacultyController;
+use App\Http\Controllers\MajorController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -24,5 +25,10 @@ Route::prefix('faculties')->group(function () {
     Route::controller(FacultyController::class)->group(function () {
         Route::get('/', 'index')->name('faculties.index');
         Route::get('/{faculty}', 'show')->name('faculties.show');
+    });
+
+    Route::controller(MajorController::class)->group(function () {
+        Route::get('/{faculty}/majors', 'index')->name('majors.index');
+        Route::get('/{faculty}/majors/{major}', 'show')->scopeBindings()->name('majors.show');
     });
 });
