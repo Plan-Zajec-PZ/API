@@ -11,6 +11,9 @@ class SpecializationResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
+            'groups' => GroupResource::collection($this->whenLoaded('groups')),
+            'abbreviationLegend' => AbbreviationLegendResource::collection($this->whenLoaded('abbreviationLegends')),
+            'subjectLegend' => new SubjectLegendResource($this->whenLoaded('subjectLegend')),
         ];
     }
 }
