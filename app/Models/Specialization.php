@@ -22,9 +22,9 @@ class Specialization extends Model
         return $this->belongsTo(Major::class);
     }
 
-    public function abbreviationLegend(): HasOne
+    public function abbreviationLegends(): HasMany
     {
-        return $this->hasOne(AbbreviationLegend::class);
+        return $this->hasMany(AbbreviationLegend::class);
     }
 
     public function subjectLegend(): HasOne
