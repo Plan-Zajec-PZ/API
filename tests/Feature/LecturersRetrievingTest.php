@@ -17,6 +17,11 @@ class LecturersRetrievingTest extends TestCase
         parent::setUp();
 
         $this->seed(LecturersSeeder::class);
+
+        $this->withHeader(
+            'Authorization',
+            'Bearer ' . config('security.remote_key')
+        );
     }
 
     public function testAllLecturersCanBeRetrieved()

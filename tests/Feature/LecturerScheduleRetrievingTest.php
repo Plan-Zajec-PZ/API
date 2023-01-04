@@ -18,6 +18,11 @@ class LecturerScheduleRetrievingTest extends TestCase
 
         $this->seed(LecturersSeeder::class);
 
+        $this->withHeader(
+            'Authorization',
+            'Bearer ' . config('security.remote_key')
+        );
+
         Roach::fake();
     }
 
