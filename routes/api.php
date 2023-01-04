@@ -3,6 +3,7 @@
 use App\Http\Controllers\LecturerController;
 use App\Http\Controllers\FacultyController;
 use App\Http\Controllers\MajorController;
+use App\Http\Controllers\SpecializationController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -31,4 +32,9 @@ Route::prefix('faculties')->group(function () {
         Route::get('/{faculty}/majors', 'index')->name('majors.index');
         Route::get('/{faculty}/majors/{major}', 'show')->scopeBindings()->name('majors.show');
     });
+});
+
+Route::controller(SpecializationController::class)->group(function () {
+    Route::get('/majors/{major}/specializations', 'index')->name('specializations.index');
+    Route::get('/majors/{major}/specializations/{specialization}', 'show')->scopeBindings()->name('specializations.show');
 });
