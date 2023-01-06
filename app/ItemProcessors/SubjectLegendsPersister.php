@@ -16,7 +16,6 @@ class SubjectLegendsPersister implements ItemProcessorInterface
     {
         $subjectLegends = $item['subjectLegends'];
         $specializationPageLink = $item['specialization_page_link'];
-
         $this->persistSubjectLegends($subjectLegends, $specializationPageLink);
         return $item;
     }
@@ -27,16 +26,18 @@ class SubjectLegendsPersister implements ItemProcessorInterface
             $specialization = Specialization::query()->firstWhere([
                 'link' => $specializationPageLink,
             ]);
+            foreach ($subjectLegends as $name => $legend) {
+                $subjectLegend = SubjectLegend::query()
+                    ->firstOrNew([
+                        'name' => $name,
+                        'content' => json_encode($legend),
+                        'specialization_id' => $specialization->id,
+                    ]);
 
-            $subjectLegend = SubjectLegend::query()
-                ->firstOrNew([
-                    'content' => json_encode($subjectLegends),
-                    'specialization_id' => $specialization->id,
-                ]);
+                $subjectLegend->specialization()->associate($specialization);
 
-            $subjectLegend->specialization()->associate($specialization);
-
-            $subjectLegend->save();
+                $subjectLegend->save();
+            }
         }
     }
 }
