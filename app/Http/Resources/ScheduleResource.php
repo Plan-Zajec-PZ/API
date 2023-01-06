@@ -9,7 +9,7 @@ class ScheduleResource extends JsonResource
     public function toArray($request): array
     {
         return [
-            'content' => $this->content,
+            'content' => json_decode($this->content),
             'legend' => LegendResource::collection($this->legends),
         ];
     }
