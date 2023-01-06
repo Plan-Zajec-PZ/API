@@ -9,15 +9,25 @@ use RoachPHP\Roach;
 
 class RunLecturerScheduleSpider extends Command
 {
+    /**
+     * The name and signature of the console command.
+     *
+     * @var string
+     */
     protected $signature = 'scrap:lecturer {lecturer}';
 
+    /**
+     * The console command description.
+     *
+     * @var string
+     */
     protected $description = 'Run spider to scrap specific lecturer with related schedule';
 
-    public function isolationLockExpiresAt(): \DateTimeInterface|\DateInterval
-    {
-        return now()->addMinutes(5);
-    }
-
+    /**
+     * Execute the console command.
+     *
+     * @return int
+     */
     public function handle(): int
     {
         try {
