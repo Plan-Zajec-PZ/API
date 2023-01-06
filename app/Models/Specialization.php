@@ -27,9 +27,9 @@ class Specialization extends Model
         return $this->hasMany(AbbreviationLegend::class);
     }
 
-    public function subjectLegend(): HasOne
+    public function subjectLegends(): HasMany
     {
-        return $this->hasOne(SubjectLegend::class);
+        return $this->hasMany(SubjectLegend::class);
     }
 
     public function groups(): HasMany
