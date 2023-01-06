@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Specialization extends Model
 {
@@ -27,9 +26,9 @@ class Specialization extends Model
         return $this->hasMany(AbbreviationLegend::class);
     }
 
-    public function subjectLegend(): HasOne
+    public function subjectLegends(): HasMany
     {
-        return $this->hasOne(SubjectLegend::class);
+        return $this->hasMany(SubjectLegend::class);
     }
 
     public function groups(): HasMany

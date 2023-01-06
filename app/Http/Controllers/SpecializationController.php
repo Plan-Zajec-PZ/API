@@ -16,6 +16,6 @@ class SpecializationController extends Controller
 
     public function show(Major $major, Specialization $specialization): SpecializationResource
     {
-        return new SpecializationResource($specialization->load(['groups', 'abbreviationLegends', 'subjectLegend']));
+        return new SpecializationResource($specialization->load(['groups', 'abbreviationLegends', 'subjectLegends']));
     }
 }

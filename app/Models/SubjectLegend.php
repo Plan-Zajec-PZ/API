@@ -12,6 +12,7 @@ class SubjectLegend extends Model
 
     protected $fillable = [
         'content',
+        'name'
     ];
 
     public function specialization(): BelongsTo
