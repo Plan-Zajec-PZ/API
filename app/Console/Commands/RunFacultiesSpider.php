@@ -37,8 +37,12 @@ class RunFacultiesSpider extends Command
         try {
             Roach::startSpider(FacultiesSpider::class, $overrides);
         } catch (\Throwable) {
+            $this->error('Scraper failed!');
+
             return Command::FAILURE;
         }
+
+        $this->info('Success!');
 
         return Command::SUCCESS;
     }

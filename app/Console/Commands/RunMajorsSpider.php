@@ -37,8 +37,12 @@ class RunMajorsSpider extends Command
         try {
             Roach::startSpider($spiderClass);
         } catch (\Throwable) {
+            $this->error('Scraper failed!');
+
             return Command::FAILURE;
         }
+
+        $this->info('Success!');
 
         return Command::SUCCESS;
     }

@@ -32,8 +32,12 @@ class RunLecturersSpider extends Command
         try {
             Roach::startSpider(LecturersSpider::class);
         } catch (\Throwable) {
+            $this->error('Scraper failed!');
+
             return Command::FAILURE;
         }
+
+        $this->info('Success!');
 
         return Command::SUCCESS;
     }

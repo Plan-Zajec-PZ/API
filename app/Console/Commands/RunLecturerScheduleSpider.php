@@ -38,8 +38,12 @@ class RunLecturerScheduleSpider extends Command
                 context: $this->buildContext($lecturer)
             );
         } catch (\Throwable) {
+            $this->error('Scraper failed!');
+
             return Command::FAILURE;
         }
+
+        $this->info('Success!');
 
         return Command::SUCCESS;
     }
