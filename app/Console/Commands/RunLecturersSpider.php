@@ -17,7 +17,7 @@ class RunLecturersSpider extends Command implements Isolatable
     {
         return now()->addMinutes(5);
     }
-    
+
     public function handle(): int
     {
         try {
