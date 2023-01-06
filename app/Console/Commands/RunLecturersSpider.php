@@ -4,9 +4,10 @@ namespace App\Console\Commands;
 
 use App\Spiders\LecturersSpider;
 use Illuminate\Console\Command;
+use Illuminate\Contracts\Console\Isolatable;
 use RoachPHP\Roach;
 
-class RunLecturersSpider extends Command
+class RunLecturersSpider extends Command implements Isolatable
 {
     /**
      * The name and signature of the console command.
@@ -21,6 +22,11 @@ class RunLecturersSpider extends Command
      * @var string
      */
     protected $description = 'Run spider to scrap lecturers';
+
+    public function isolationLockExpiresAt(): \DateTimeInterface|\DateInterval
+    {
+        return now()->addMinutes(5);
+    }
 
     /**
      * Execute the console command.

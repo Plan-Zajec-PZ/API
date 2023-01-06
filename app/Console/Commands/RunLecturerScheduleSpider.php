@@ -23,6 +23,11 @@ class RunLecturerScheduleSpider extends Command
      */
     protected $description = 'Run spider to scrap specific lecturer with related schedule';
 
+    public function isolationLockExpiresAt(): \DateTimeInterface|\DateInterval
+    {
+        return now()->addMinutes(5);
+    }
+
     /**
      * Execute the console command.
      *

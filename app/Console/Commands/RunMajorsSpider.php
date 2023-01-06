@@ -23,6 +23,11 @@ class RunMajorsSpider extends Command
      */
     protected $description = 'Run spider to scrap majors or majors schedules';
 
+    public function isolationLockExpiresAt(): \DateTimeInterface|\DateInterval
+    {
+        return now()->addMinutes(5);
+    }
+
     /**
      * Execute the console command.
      *
