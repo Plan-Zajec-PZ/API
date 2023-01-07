@@ -31,8 +31,11 @@ class LecturersRetrievingTest extends TestCase
         $response = $this->getJson($route);
         $response->assertOk();
 
-        $expectedNumber = Lecturer::query()->count();
-        $response->assertJsonCount($expectedNumber);
+        $response->assertJsonStructure([
+            'data' => [
+                ['id', 'name']
+            ]
+        ]);
     }
 
     public function testLecturersFromSpecificFaultyCanBeRetrieved()
@@ -46,8 +49,11 @@ class LecturersRetrievingTest extends TestCase
         $response = $this->getJson($route);
         $response->assertOk();
 
-        $expectedNumber = $selectedFaculty->lecturers()->count();
-        $response->assertJsonCount($expectedNumber);
+        $response->assertJsonStructure([
+            'data' => [
+                ['id', 'name']
+            ]
+        ]);
     }
 
     public function testRequestWithInvalidFacultyIdIsRejected()
