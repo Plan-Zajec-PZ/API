@@ -176,10 +176,10 @@ class MajorSchedulesSpider extends BasicSpider
             function ($item) use (&$i, $hours) {
                 array_unshift($item, $hours[$i]);
                 $i++;
-                return $item;},
+                return $item;
+            },
             $schedule
         );
-
     }
 
     private function createGroupScheduleFromDailySchedule(array $dailySchedules, array $groups): array
@@ -202,6 +202,6 @@ class MajorSchedulesSpider extends BasicSpider
 
     private function addKeyToArray(array $array, string $key): array
     {
-        return array_map(fn($item) => [$key => $item], $array);
+        return array_map(fn ($item) => [$key => $item], $array);
     }
 }
