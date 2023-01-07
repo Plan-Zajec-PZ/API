@@ -10,8 +10,8 @@ class LecturerResource extends JsonResource
     {
         return [
             'name' => $this->name,
-            'faculty' => new FacultyResource($this->faculty),
-            'schedule' => new ScheduleResource($this->schedule),
+            'faculty' => new FacultyResource($this->whenLoaded('faculty')),
+            'schedule' => new ScheduleResource($this->whenLoaded('schedule')),
         ];
     }
 }
