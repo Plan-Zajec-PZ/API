@@ -162,16 +162,24 @@ class MajorSchedulesSpider extends BasicSpider
 
         $result = [];
         $schedule = array_values($subjects);
-
         foreach ($groups as $index => $group) {
             $groupSchedule = array_column($schedule, $index);
-            $result[$group] = array_combine(
-                $hours,
-                $groupSchedule
-            );
+            $result[$group] = $this->addHoursToSchedule($hours, $groupSchedule);
         }
-
         return $result;
+    }
+
+    private function addHoursToSchedule(array $hours, array $schedule): array
+    {
+        $i = 0;
+        return array_map(
+            function ($item) use (&$i, $hours) {
+                array_unshift($item, $hours[$i]);
+                $i++;
+                return $item;},
+            $schedule
+        );
+
     }
 
     private function createGroupScheduleFromDailySchedule(array $dailySchedules, array $groups): array
