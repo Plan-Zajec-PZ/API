@@ -162,16 +162,24 @@ class MajorSchedulesSpider extends BasicSpider
 
         $result = [];
         $schedule = array_values($subjects);
-
         foreach ($groups as $index => $group) {
             $groupSchedule = array_column($schedule, $index);
-            $result[$group] = array_combine(
-                $hours,
-                $groupSchedule
-            );
+            $result[$group] = $this->addHoursToSchedule($hours, $groupSchedule);
         }
-
         return $result;
+    }
+
+    private function addHoursToSchedule(array $hours, array $schedule): array
+    {
+        $i = 0;
+        return array_map(
+            function ($item) use (&$i, $hours) {
+                array_unshift($item, $hours[$i]);
+                $i++;
+                return $item;
+            },
+            $schedule
+        );
     }
 
     private function createGroupScheduleFromDailySchedule(array $dailySchedules, array $groups): array
@@ -179,13 +187,21 @@ class MajorSchedulesSpider extends BasicSpider
         $result = [];
         $days = array_column($dailySchedules, 'day');
         $schedules = array_column($dailySchedules, 'schedule');
+
         foreach ($groups as $group) {
             $groupSchedule = array_column($schedules, $group);
-            $result[$group] = array_combine(
-                $days,
-                $groupSchedule,
-            );
+
+            $days = $this->addKeyToArray($days, 'day');
+            $groupSchedule = $this->addKeyToArray($groupSchedule, 'rows');
+
+            $result[$group] = (array_merge_recursive_distinct($days, $groupSchedule));
         }
+
         return $result;
+    }
+
+    private function addKeyToArray(array $array, string $key): array
+    {
+        return array_map(fn ($item) => [$key => $item], $array);
     }
 }
