@@ -41,7 +41,7 @@ class ShowFacultyTest extends TestCase
         ]);
     }
 
-    public function testRequestWithInvalidFacultyIdIsRejected()
+    public function testRequestWithInvalidFacultyIdIsNotFound()
     {
         Faculty::query()->delete();
         $this->assertDatabaseEmpty('faculties');
