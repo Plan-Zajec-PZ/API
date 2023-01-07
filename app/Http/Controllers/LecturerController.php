@@ -13,7 +13,7 @@ class LecturerController extends Controller
     {
         $facultyId = $request->validated('faculty');
 
-        return $action->execute($facultyId);
+        return ['data' => $action->execute($facultyId)];
     }
 
     public function show(Lecturer $lecturer): LecturerResource

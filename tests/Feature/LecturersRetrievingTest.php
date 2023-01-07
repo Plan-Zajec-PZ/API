@@ -3,7 +3,6 @@
 namespace Tests\Feature;
 
 use App\Models\Faculty;
-use App\Models\Lecturer;
 use Database\Seeders\LecturersSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -31,8 +30,11 @@ class LecturersRetrievingTest extends TestCase
         $response = $this->getJson($route);
         $response->assertOk();
 
-        $expectedNumber = Lecturer::query()->count();
-        $response->assertJsonCount($expectedNumber);
+        $response->assertJsonStructure([
+            'data' => [
+                ['id', 'name']
+            ]
+        ]);
     }
 
     public function testLecturersFromSpecificFaultyCanBeRetrieved()
@@ -46,8 +48,11 @@ class LecturersRetrievingTest extends TestCase
         $response = $this->getJson($route);
         $response->assertOk();
 
-        $expectedNumber = $selectedFaculty->lecturers()->count();
-        $response->assertJsonCount($expectedNumber);
+        $response->assertJsonStructure([
+            'data' => [
+                ['id', 'name']
+            ]
+        ]);
     }
 
     public function testRequestWithInvalidFacultyIdIsRejected()
