@@ -6,10 +6,8 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class GroupScheduleResource extends JsonResource
 {
-    public function toArray($request)
+    public function toArray($request): array
     {
-        return [
-          'content' => json_decode($this->content)
-        ];
+        return json_decode($this->content);
     }
 }
