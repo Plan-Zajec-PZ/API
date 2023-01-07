@@ -3,7 +3,6 @@
 namespace Tests\Feature;
 
 use App\Models\Faculty;
-use App\Models\Lecturer;
 use Database\Seeders\LecturersSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
