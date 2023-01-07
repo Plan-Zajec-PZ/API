@@ -8,6 +8,7 @@ use Generator;
 use RoachPHP\Downloader\Middleware\RequestDeduplicationMiddleware;
 use RoachPHP\Extensions\LoggerExtension;
 use RoachPHP\Extensions\StatsCollectorExtension;
+use RoachPHP\Http\Request;
 use RoachPHP\Http\Response;
 use RoachPHP\Spider\BasicSpider;
 use RoachPHP\Spider\ParseResult;
@@ -45,5 +46,14 @@ class FacultiesSpider extends BasicSpider
         ]);
 
         yield $this->item($results);
+    }
+
+    protected function initialRequests(): array
+    {
+        $url = config('roach.base_url');
+
+        return [
+            new Request('GET', $url, [$this, 'parse']),
+        ];
     }
 }
