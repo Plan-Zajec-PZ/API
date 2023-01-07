@@ -191,10 +191,10 @@ class MajorSchedulesSpider extends BasicSpider
         foreach ($groups as $group) {
             $groupSchedule = array_column($schedules, $group);
 
-            $days = $this->addKeyToArray($days, 'day');
-            $groupSchedule = $this->addKeyToArray($groupSchedule, 'rows');
+            $daysWithKey = $this->addKeyToArray($days, 'day');
+            $groupScheduleWithKey = $this->addKeyToArray($groupSchedule, 'rows');
 
-            $result[$group] = (array_merge_recursive_distinct($days, $groupSchedule));
+            $result[$group] = (array_merge_recursive_distinct($daysWithKey, $groupScheduleWithKey));
         }
 
         return $result;
