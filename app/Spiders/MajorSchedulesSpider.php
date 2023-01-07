@@ -187,13 +187,21 @@ class MajorSchedulesSpider extends BasicSpider
         $result = [];
         $days = array_column($dailySchedules, 'day');
         $schedules = array_column($dailySchedules, 'schedule');
+
         foreach ($groups as $group) {
             $groupSchedule = array_column($schedules, $group);
-            $result[$group] = array_combine(
-                $days,
-                $groupSchedule,
-            );
+
+            $days = $this->addKeyToArray($days, 'day');
+            $groupSchedule = $this->addKeyToArray($groupSchedule, 'rows');
+
+            $result[$group] = (array_merge_recursive_distinct($days, $groupSchedule));
         }
+
         return $result;
+    }
+
+    private function addKeyToArray(array $array, string $key): array
+    {
+        return array_map(fn($item) => [$key => $item], $array);
     }
 }
