@@ -35,6 +35,19 @@ class LecturerScheduleSpider extends BasicSpider
         StatsCollectorExtension::class,
     ];
 
+    protected function initialRequests(): array
+    {
+        $models = $this->context['models'];
+        $requests = [];
+
+        foreach ($models as $model) {
+            $url = $model->link ?? throw new ModelWithoutLink();
+            $requests[] = new Request('GET', $url, [$this, 'parse']);
+        }
+
+        return $requests;
+    }
+
     /**
      * @return Generator<ParseResult>
      */
@@ -53,19 +66,6 @@ class LecturerScheduleSpider extends BasicSpider
         ]);
     }
 
-    protected function initialRequests(): array
-    {
-        $models = $this->context['models'];
-        $requests = [];
-
-        foreach ($models as $model) {
-            $url = $model->link ?? throw new ModelWithoutLink();
-            $requests[] = new Request('GET', $url, [$this, 'parse']);
-        }
-
-        return $requests;
-    }
-
     private function getPlanTables(Response $response): Crawler
     {
         return $response->filterXPath('//table[@class="TabPlan"][position()!=last()]');
@@ -74,13 +74,15 @@ class LecturerScheduleSpider extends BasicSpider
     private function getSchedules(Crawler $planTable): array
     {
         $days = $this->getDays($planTable);
-        $numberOfDays = $days->count();
 
-        $schedules = $days->each(fn (Crawler $day, int $index) => [
-            $day->text() => $this->getDailySchedule($planTable, $numberOfDays, $index)
-        ]);
+        $schedules = $days->each(
+            fn (Crawler $day, int $index) => [
+                'date' => $day->text(),
+                'dailySchedule' => $this->getDailySchedule($planTable, $days->count(), $index)
+            ]
+        );
 
-        return array_merge(...$schedules);
+        return $schedules;
     }
 
     private function getDays(Crawler $table): Crawler
@@ -92,10 +94,14 @@ class LecturerScheduleSpider extends BasicSpider
     {
         $forWeekend = $index >= $numberOfDays-2;
 
-        return array_combine(
-            $this->extractHours($planTable, $forWeekend),
-            $this->extractLessons($planTable, $index)
+        $hours = array_map(
+            fn ($hours) => ['hours' => $hours],
+            $this->extractHours($planTable, $forWeekend)
         );
+
+        $lessons = $this->extractLessons($planTable, $index);
+
+        return array_merge_recursive_distinct($hours, $lessons);
     }
 
     private function extractHours(Crawler $table, bool $forWeekend = false): array

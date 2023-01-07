@@ -18,6 +18,6 @@ class LecturerController extends Controller
 
     public function show(Lecturer $lecturer): LecturerResource
     {
-        return new LecturerResource($lecturer);
+        return new LecturerResource($lecturer->load(['faculty', 'schedule']));
     }
 }
