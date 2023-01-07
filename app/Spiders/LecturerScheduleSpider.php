@@ -95,7 +95,7 @@ class LecturerScheduleSpider extends BasicSpider
         $forWeekend = $index >= $numberOfDays-2;
 
         $hours = array_map(
-            fn($hours) => ['hours' => $hours],
+            fn ($hours) => ['hours' => $hours],
             $this->extractHours($planTable, $forWeekend)
         );
 
