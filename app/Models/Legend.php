@@ -13,6 +13,7 @@ class Legend extends Model
     protected $fillable = [
         'abbreviation',
         'fullname',
+        'tracking_number_id'
     ];
 
     public function schedule(): BelongsTo
