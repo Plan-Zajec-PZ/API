@@ -24,4 +24,9 @@ class Major extends Model
     {
         return $this->hasMany(Specialization::class);
     }
+
+    public function trackNumber(): BelongsTo
+    {
+        return $this->belongsTo(TrackNumber::class);
+    }
 }

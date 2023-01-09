@@ -26,4 +26,9 @@ class Lecturer extends Model
     {
         return $this->hasOne(Schedule::class);
     }
+
+    public function trackNumber(): BelongsTo
+    {
+        return $this->belongsTo(TrackNumber::class);
+    }
 }

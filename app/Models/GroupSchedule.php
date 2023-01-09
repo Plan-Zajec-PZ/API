@@ -18,4 +18,9 @@ class GroupSchedule extends Model
     {
         return $this->belongsTo(Group::class);
     }
+
+    public function trackNumber(): BelongsTo
+    {
+        return $this->belongsTo(TrackNumber::class);
+    }
 }

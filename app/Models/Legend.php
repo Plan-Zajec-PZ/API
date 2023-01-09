@@ -19,4 +19,9 @@ class Legend extends Model
     {
         return $this->belongsTo(Schedule::class);
     }
+
+    public function trackNumber(): BelongsTo
+    {
+        return $this->belongsTo(TrackNumber::class);
+    }
 }
