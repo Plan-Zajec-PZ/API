@@ -17,7 +17,7 @@ class GroupsPersister implements ItemProcessorInterface
         $groups = $item['groups'];
         $trackingNumberId = $item['tracking_number_id'];
         $link = $item['specialization_page_link'];
-        dump($link);
+
         $specialization = Specialization::query()
             ->where('link', $link)
             ->firstOrFail();
