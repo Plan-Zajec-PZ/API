@@ -34,9 +34,7 @@ class MajorsPersister implements ItemProcessorInterface
     private function persistMajor(array $majorItem, Faculty $faculty): Major
     {
         $major = Major::query()->firstOrNew(['name' => $majorItem['major_name']]);
-
         $major->faculty()->associate($faculty);
-        $major->tracking_number_id = $majorItem['tracking_number_id'];
 
         $major->save();
 
@@ -47,15 +45,11 @@ class MajorsPersister implements ItemProcessorInterface
     {
         foreach ($majorItemSpecializations as $majorItemSpecialization) {
             $specialization = Specialization::query()
-                ->firstOrNew(
-                    ['link' => $majorItemSpecialization['link']],
-                    ['name' => $majorItemSpecialization['name']],
-                );
-
+                ->firstOrNew([
+                    'name' => $majorItemSpecialization['name'],
+                    'link' => $majorItemSpecialization['link'],
+                ]);
             $specialization->major()->associate($major);
-
-            $specialization->name = $majorItemSpecialization['name'];
-            $specialization->tracking_number_id = $major->tracking_number_id;
 
             $specialization->save();
         }
