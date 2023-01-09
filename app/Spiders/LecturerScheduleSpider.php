@@ -31,7 +31,6 @@ class LecturerScheduleSpider extends BasicSpider
     ];
 
     public array $extensions = [
-        LoggerExtension::class,
         StatsCollectorExtension::class,
     ];
 

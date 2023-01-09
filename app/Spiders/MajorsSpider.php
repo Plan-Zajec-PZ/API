@@ -27,7 +27,6 @@ class MajorsSpider extends BasicSpider
     ];
 
     public array $extensions = [
-        LoggerExtension::class,
         StatsCollectorExtension::class,
     ];
 
