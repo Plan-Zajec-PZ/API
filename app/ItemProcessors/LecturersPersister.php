@@ -21,15 +21,16 @@ class LecturersPersister implements ItemProcessorInterface
                 $faculty['facultyName']
             );
 
-            $lecturers = $this->attachFacultyIdTo(
+            $lecturers = $this->attachForeignKeys(
                 $faculty['lecturers'],
-                $facultyModel->id
+                $facultyModel->id,
+                $faculty['tracking_number_id'],
             );
 
             $facultyModel->lecturers()->upsert(
                 $lecturers,
                 ['link'],
-                ['name', 'faculty_id']
+                ['name', 'faculty_id', 'tracking_number_id']
             );
         }
 
@@ -43,11 +44,12 @@ class LecturersPersister implements ItemProcessorInterface
             ->firstOrFail();
     }
 
-    private function attachFacultyIdTo(array $lecturers, int $facultyId): array
+    private function attachForeignKeys(array $lecturers, int $facultyId, int $trackingNumberId): array
     {
         $callback = fn ($lecturer) => [
             ...$lecturer,
-            'faculty_id' => $facultyId
+            'faculty_id' => $facultyId,
+            'tracking_number_id' => $trackingNumberId,
         ];
 
         return array_map($callback, $lecturers);
