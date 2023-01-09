@@ -63,6 +63,7 @@ class LecturerScheduleSpider extends BasicSpider
             'schedule' => array_merge(...$schedules),
             'legend' => $this->getLegend($response),
             'initiatorUri' => $response->getRequest()->getUri(),
+            'tracking_number_id' => $this->context['trackingNumberId'],
         ]);
     }
 
