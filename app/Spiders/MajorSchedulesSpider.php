@@ -78,6 +78,7 @@ class MajorSchedulesSpider extends BasicSpider
             'abbreviationLegend' => $abbreviationLegend,
             'subjectLegends' => $subjectLegends,
             'dailySchedules' => $this->createGroupScheduleFromDailySchedule($dailySchedules, $groups),
+            'tracking_number_id' => $this->context['trackingNumberId'],
         ]);
     }
 
