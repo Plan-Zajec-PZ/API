@@ -7,7 +7,6 @@ use App\ItemProcessors\LegendPersister;
 use App\ItemProcessors\SchedulePersister;
 use Generator;
 use RoachPHP\Downloader\Middleware\RequestDeduplicationMiddleware;
-use RoachPHP\Extensions\LoggerExtension;
 use RoachPHP\Extensions\StatsCollectorExtension;
 use RoachPHP\Http\Request;
 use RoachPHP\Http\Response;

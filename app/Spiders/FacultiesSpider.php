@@ -6,7 +6,6 @@ use App\ItemProcessors\FacultiesPersister;
 use App\SpiderMiddlewares\ResponseEncodingCorrection;
 use Generator;
 use RoachPHP\Downloader\Middleware\RequestDeduplicationMiddleware;
-use RoachPHP\Extensions\LoggerExtension;
 use RoachPHP\Extensions\StatsCollectorExtension;
 use RoachPHP\Http\Request;
 use RoachPHP\Http\Response;
