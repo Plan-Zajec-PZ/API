@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('specializations', function (Blueprint $table) {
-            $table->foreignId('track_number_id')->constrained();
+            $table->foreignId('tracking_number_id')->constrained();
         });
     }
 
@@ -26,7 +26,7 @@ return new class extends Migration
     public function down()
     {
         Schema::table('specializations', function (Blueprint $table) {
-            $table->dropColumn('track_number_id');
+            $table->dropColumn('tracking_number_id');
         });
     }
 };

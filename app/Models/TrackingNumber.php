@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class TrackNumber extends Model
+class TrackingNumber extends Model
 {
     use HasFactory;
 }

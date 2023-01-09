@@ -17,3 +17,9 @@ use Illuminate\Support\Facades\Artisan;
 Artisan::command('inspire', function () {
     $this->comment(Inspiring::quote());
 })->purpose('Display an inspiring quote');
+
+Artisan::command('ll', function () {
+    \RoachPHP\Roach::startSpider(\App\Spiders\LecturerScheduleSpider::class, context: [
+        'models' => \App\Models\Lecturer::query()->take(20)->get()->toArray(),
+    ]);
+});

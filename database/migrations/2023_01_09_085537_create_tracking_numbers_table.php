@@ -13,8 +13,10 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('lecturers', function (Blueprint $table) {
-            $table->foreignId('track_number_id')->constrained();
+        Schema::create('tracking_numbers', function (Blueprint $table) {
+            $table->id();
+            $table->string('hash', 255);
+            $table->timestamps();
         });
     }
 
@@ -25,8 +27,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('lecturers', function (Blueprint $table) {
-            $table->dropColumn('track_number_id');
-        });
+        Schema::dropIfExists('tracking_numbers');
     }
 };

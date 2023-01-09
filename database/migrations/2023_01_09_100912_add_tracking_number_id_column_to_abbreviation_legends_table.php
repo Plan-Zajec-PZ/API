@@ -13,8 +13,8 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('groups', function (Blueprint $table) {
-            $table->foreignId('track_number_id')->constrained();
+        Schema::table('abbreviation_legends', function (Blueprint $table) {
+            $table->foreignId('tracking_number_id')->constrained();
         });
     }
 
@@ -25,8 +25,8 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('groups', function (Blueprint $table) {
-            $table->dropColumn('track_number_id');
+        Schema::table('abbreviation_legends', function (Blueprint $table) {
+            $table->dropColumn('tracking_number_id');
         });
     }
 };

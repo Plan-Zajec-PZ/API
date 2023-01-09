@@ -25,8 +25,8 @@ class Schedule extends Model
         return $this->hasMany(Legend::class);
     }
 
-    public function trackNumber(): BelongsTo
+    public function trackingNumber(): BelongsTo
     {
-        return $this->belongsTo(TrackNumber::class);
+        return $this->belongsTo(TrackingNumber::class);
     }
 }

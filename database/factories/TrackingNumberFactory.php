@@ -6,9 +6,9 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\TrackNumber>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\TrackingNumber>
  */
-class TrackNumberFactory extends Factory
+class TrackingNumberFactory extends Factory
 {
     /**
      * Define the model's default state.

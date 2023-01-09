@@ -26,8 +26,8 @@ class Faculty extends Model
         return $this->hasMany(Major::class);
     }
 
-    public function trackNumber(): BelongsTo
+    public function trackingNumber(): BelongsTo
     {
-        return $this->belongsTo(TrackNumber::class);
+        return $this->belongsTo(TrackingNumber::class);
     }
 }

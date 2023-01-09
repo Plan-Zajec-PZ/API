@@ -4,7 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Faculty;
 use App\Models\Lecturer;
-use App\Models\TrackNumber;
+use App\Models\TrackingNumber;
 use Illuminate\Database\Seeder;
 
 class LecturersSeeder extends Seeder
@@ -16,20 +16,20 @@ class LecturersSeeder extends Seeder
      */
     public function run()
     {
-        $trackNumber = TrackNumber::factory();
+        $trackingNumber = TrackingNumber::factory();
 
         Lecturer::factory()
             ->count(5)
-            ->for(Faculty::factory()->for($trackNumber))
-            ->for($trackNumber)
+            ->for(Faculty::factory()->for($trackingNumber))
+            ->for($trackingNumber)
             ->create();
 
-        $trackNumber = TrackNumber::factory();
+        $trackingNumber = TrackingNumber::factory();
 
         Lecturer::factory()
             ->count(5)
-            ->for(Faculty::factory()->for($trackNumber))
-            ->for($trackNumber)
+            ->for(Faculty::factory()->for($trackingNumber))
+            ->for($trackingNumber)
             ->create();
     }
 }
