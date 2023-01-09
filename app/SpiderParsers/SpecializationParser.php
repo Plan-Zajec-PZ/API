@@ -3,6 +3,7 @@
 namespace App\SpiderParsers;
 
 use App\SpiderParsers\Components\AbbreviationLegend;
+use App\SpiderParsers\Components\SubjectLegendsSection;
 use RoachPHP\Http\Response;
 
 class SpecializationParser extends Parser
@@ -16,4 +17,12 @@ class SpecializationParser extends Parser
             $abbreviationLegend->getNames()
         );
     }
+
+    public function parseSubjectLegends(): array
+    {
+        $subjectLegends = new SubjectLegendsSection($this->response);
+
+        return $subjectLegends->getLegends();
+    }
+
 }

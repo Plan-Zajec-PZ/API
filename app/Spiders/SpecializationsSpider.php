@@ -3,6 +3,7 @@
 namespace App\Spiders;
 
 use App\ItemProcessors\AbbreviationLegendsPersister;
+use App\ItemProcessors\SubjectLegendsPersister;
 use App\Models\Specialization;
 use App\SpiderParsers\SpecializationParser;
 use Generator;
@@ -20,6 +21,7 @@ class SpecializationsSpider extends BasicSpider
 
     public array $itemProcessors = [
         AbbreviationLegendsPersister::class,
+        SubjectLegendsPersister::class
     ];
 
     public array $extensions = [
@@ -49,10 +51,12 @@ class SpecializationsSpider extends BasicSpider
         $parser = new SpecializationParser($response);
 
         $abbreviationLegend = $parser->parseAbbreviationLegend();
+        $subjectLegends = $parser->parseSubjectLegends();
 
         yield $this->item([
             'specialization_page_link' => $response->getUri(),
             'abbreviationLegend' => $abbreviationLegend,
+            'subjectLegends' => $subjectLegends,
         ]);
     }
 }

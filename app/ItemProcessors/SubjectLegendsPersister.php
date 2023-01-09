@@ -26,11 +26,11 @@ class SubjectLegendsPersister implements ItemProcessorInterface
             $specialization = Specialization::query()->firstWhere([
                 'link' => $specializationPageLink,
             ]);
-            foreach ($subjectLegends as $name => $legend) {
+            foreach ($subjectLegends as $legend) {
                 $subjectLegend = SubjectLegend::query()
                     ->firstOrNew([
-                        'name' => $name,
-                        'content' => json_encode($legend),
+                        'name' => $legend->getName(),
+                        'content' => json_encode($legend->getRows()),
                         'specialization_id' => $specialization->id,
                     ]);
 
