@@ -14,7 +14,7 @@ return new class () extends Migration {
     {
         Schema::create('specializations', function (Blueprint $table) {
             $table->id();
-            $table->string('name', 255)->unique();
+            $table->string('name', 255);
             $table->string('link', 255)->unique();
             $table->foreignId('major_id')->constrained()->cascadeOnDelete();
             $table->timestamps();

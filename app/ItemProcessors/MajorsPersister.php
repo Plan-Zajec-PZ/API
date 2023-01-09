@@ -36,6 +36,7 @@ class MajorsPersister implements ItemProcessorInterface
         $major = Major::query()->firstOrNew(['name' => $majorItem['major_name']]);
         $major->faculty()->associate($faculty);
 
+        $major->tracking_number_id = $majorItem['tracking_number_id'];
         $major->save();
 
         return $major;
@@ -45,11 +46,14 @@ class MajorsPersister implements ItemProcessorInterface
     {
         foreach ($majorItemSpecializations as $majorItemSpecialization) {
             $specialization = Specialization::query()
-                ->firstOrNew([
-                    'name' => $majorItemSpecialization['name'],
-                    'link' => $majorItemSpecialization['link'],
-                ]);
+                ->firstOrNew(
+                    ['link' => $majorItemSpecialization['link']],
+                    ['name' => $majorItemSpecialization['name']],
+                );
             $specialization->major()->associate($major);
+
+            $specialization->name = $majorItemSpecialization['name'];
+            $specialization->tracking_number_id = $major->tracking_number_id;
 
             $specialization->save();
         }
