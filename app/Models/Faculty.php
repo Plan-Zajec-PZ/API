@@ -14,6 +14,7 @@ class Faculty extends Model
     protected $fillable = [
         'name',
         'link',
+        'tracking_number_id'
     ];
 
     public function lecturers(): HasMany
