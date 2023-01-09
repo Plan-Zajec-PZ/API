@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('tracking_numbers', function (Blueprint $table) {
             $table->id();
-            $table->string('hash', 255);
+            $table->string('hash', 255)->unique();
             $table->timestamps();
         });
     }
