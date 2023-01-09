@@ -64,6 +64,7 @@ class MajorsSpider extends BasicSpider
                 'major_name' => $majorNode->filterXPath('//a')->text(),
                 'major_specializations' => $this->getSpecializationsFromFacultyPage($majorNode),
                 'faculty_page_link' => $response->getUri(),
+                'tracking_number_id' => $this->context['trackingNumberId'],
             ]
         );
 
