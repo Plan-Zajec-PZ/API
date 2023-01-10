@@ -45,7 +45,7 @@ class SpecializationParser extends Parser
         return $scheduleTableNode
             ->filter('tr:first-of-type > td.nazwaSpecjalnosci')
             ->each(
-                fn(Crawler $node) => $node->text()
+                fn (Crawler $node) => $node->text()
             );
     }
 
@@ -86,6 +86,6 @@ class SpecializationParser extends Parser
 
     private function addKeyToArray(array $array, string $key): array
     {
-        return array_map(fn($item) => [$key => $item], $array);
+        return array_map(fn ($item) => [$key => $item], $array);
     }
 }

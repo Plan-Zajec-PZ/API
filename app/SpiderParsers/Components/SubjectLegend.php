@@ -11,8 +11,7 @@ class SubjectLegend
 
     public function __construct(
         protected Crawler $node
-    )
-    {
+    ) {
         $this->initName();
         $this->initRows();
     }
@@ -35,7 +34,7 @@ class SubjectLegend
     protected function initRows(): void
     {
         $content = $this->node->filter('tr:not(:nth-child(2)) > td')->each(
-            fn(Crawler $node) => $node->text()
+            fn (Crawler $node) => $node->text()
         );
 
         foreach (array_chunk($content, 3) as $row) {

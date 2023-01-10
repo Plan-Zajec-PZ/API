@@ -12,8 +12,7 @@ class SubjectLegendsSection
 
     public function __construct(
         protected Response $response,
-    )
-    {
+    ) {
         $this->node = $response->filter('#prtleg + table table');
         $this->initLegends();
     }
@@ -31,5 +30,4 @@ class SubjectLegendsSection
             }
         );
     }
-
 }

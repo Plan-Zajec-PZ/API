@@ -13,8 +13,7 @@ class AbbreviationLegend
 
     public function __construct(
         protected Response $response,
-    )
-    {
+    ) {
         $this->rowsNode = $this->extractRowsNode();
         $this->abbreviations = $this->extractAbbreviations();
         $this->names = $this->extractNames();
@@ -42,7 +41,7 @@ class AbbreviationLegend
         return $this->rowsNode
             ->filter('td:nth-child(2n+1)')
             ->each(
-                fn(Crawler $node) => $node->text()
+                fn (Crawler $node) => $node->text()
             );
     }
 
@@ -51,7 +50,7 @@ class AbbreviationLegend
         return $this->rowsNode
             ->filter('td:nth-child(2n)')
             ->each(
-                fn(Crawler $node) => $node->text()
+                fn (Crawler $node) => $node->text()
             );
     }
 }
