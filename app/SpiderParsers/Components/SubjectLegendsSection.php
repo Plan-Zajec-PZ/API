@@ -11,7 +11,7 @@ class SubjectLegendsSection
 
     public function __construct(
         protected Response $response,
-    ){
+    ) {
         $this->create();
     }
 
@@ -21,7 +21,6 @@ class SubjectLegendsSection
 
         $subjectLegendTables->each(
             function (Crawler $node) use (&$subjectLegendTableNames) {
-
                 $name = $node->filter('tr:first-of-type > th')->text();
 
                 $legend = new SubjectLegend($name);
@@ -30,7 +29,7 @@ class SubjectLegendsSection
                     fn (Crawler $node) => $node->text()
                 );
 
-                foreach (array_chunk($content, 3) as $row){
+                foreach (array_chunk($content, 3) as $row) {
                     $legend->addRow($row);
                 }
 

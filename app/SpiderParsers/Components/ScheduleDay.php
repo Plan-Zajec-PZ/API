@@ -14,8 +14,7 @@ class ScheduleDay
     public function __construct(
         protected Crawler $node,
         protected array $groups
-    )
-    {
+    ) {
         $this->create();
     }
 
@@ -36,11 +35,13 @@ class ScheduleDay
         return $this->rows;
     }
 
-    protected function extractDate(){
+    protected function extractDate()
+    {
         $this->date = $this->node->text();
     }
 
-    protected function extractHours(){
+    protected function extractHours()
+    {
         $this->hoursNode = $this->node->closest('tr')->siblings()->children('td.godzina');
 
         $this->hours = $this->hoursNode->each(
@@ -48,7 +49,8 @@ class ScheduleDay
         );
     }
 
-    protected function extractRows(){
+    protected function extractRows()
+    {
         $subjects = $this->hoursNode->each(
             fn (Crawler $hour) => $hour->nextAll()->each(
                 fn (Crawler $tr) => $tr->text()

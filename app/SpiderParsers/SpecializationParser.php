@@ -46,7 +46,7 @@ class SpecializationParser extends Parser
         $schedule->create();
 
         $days = [];
-        foreach ($schedule->getDays() as $day){
+        foreach ($schedule->getDays() as $day) {
             $days[] = [
                 'day' => $day->getDate(),
                 'schedule' => $day->getRows(),

@@ -12,7 +12,7 @@ class Schedule
     public function __construct(
         protected Response $response,
         protected string $tableSelector,
-    ){
+    ) {
         $this->createTableNode();
     }
 
@@ -22,5 +22,4 @@ class Schedule
             ->filter($this->tableSelector)
             ->first();
     }
-
 }

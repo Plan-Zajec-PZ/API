@@ -13,8 +13,7 @@ class AbbreviationLegend
 
     public function __construct(
         protected Response $response,
-    )
-    {
+    ) {
         $this->setProperties();
     }
 
@@ -46,7 +45,7 @@ class AbbreviationLegend
         $this->abbreviations = $this->rowsNode
             ->filter('td:nth-child(2n+1)')
             ->each(
-                fn(Crawler $node) => $node->text()
+                fn (Crawler $node) => $node->text()
             );
     }
 
@@ -55,7 +54,7 @@ class AbbreviationLegend
         $this->names = $this->rowsNode
             ->filter('td:nth-child(2n)')
             ->each(
-                fn(Crawler $node) => $node->text()
+                fn (Crawler $node) => $node->text()
             );
     }
 }

@@ -6,7 +6,7 @@ use Symfony\Component\DomCrawler\Crawler;
 
 class SpecializationSchedule extends Schedule
 {
-    const TABLE_SELECTOR = 'table.TabPlan';
+    public const TABLE_SELECTOR = 'table.TabPlan';
 
     private array $days;
     private array $groups;
@@ -37,7 +37,7 @@ class SpecializationSchedule extends Schedule
         $this->groups = $this->tableNode
             ->filter('tr:first-of-type > td.nazwaSpecjalnosci')
             ->each(
-                fn(Crawler $node) => $node->text()
+                fn (Crawler $node) => $node->text()
             );
     }
 
