@@ -5,27 +5,35 @@ namespace App\SpiderParsers;
 use App\SpiderParsers\Components\AbbreviationLegend;
 use App\SpiderParsers\Components\SpecializationSchedule;
 use App\SpiderParsers\Components\SubjectLegendsSection;
-use Symfony\Component\DomCrawler\Crawler;
+use RoachPHP\Http\Response;
 
 class SpecializationParser extends Parser
 {
+    protected AbbreviationLegend $abbreviationLegend;
+    protected SubjectLegendsSection $subjectLegends;
+    protected SpecializationSchedule $schedule;
+
+    public function __construct(Response $response)
+    {
+        parent::__construct($response);
+        $this->abbreviationLegend = new AbbreviationLegend($this->response);
+        $this->subjectLegends = new SubjectLegendsSection($this->response);
+        $this->schedule = new SpecializationSchedule($this->response);
+    }
+
     public function parseAbbreviationLegend(): array
     {
-        $abbreviationLegend = new AbbreviationLegend($this->response);
-
         return array_combine(
-            $abbreviationLegend->getAbbreviations(),
-            $abbreviationLegend->getNames()
+            $this->abbreviationLegend->getAbbreviations(),
+            $this->abbreviationLegend->getNames()
         );
     }
 
     public function parseSubjectLegends(): array
     {
-        $subjectLegends = new SubjectLegendsSection($this->response);
-
         $names = [];
         $legends = [];
-        foreach ($subjectLegends->getLegends() as $legend) {
+        foreach ($this->subjectLegends->getLegends() as $legend) {
             $names[] = $legend->getName();
             $legends[] = $legend->getRows();
         }
@@ -38,32 +46,20 @@ class SpecializationParser extends Parser
 
     public function parseGroups()
     {
-        $scheduleTableNode = $this->response
-            ->filter('table.TabPlan')
-            ->first();
-
-        return $scheduleTableNode
-            ->filter('tr:first-of-type > td.nazwaSpecjalnosci')
-            ->each(
-                fn(Crawler $node) => $node->text()
-            );
+        return $this->schedule->getGroups();
     }
 
     public function parseSchedule()
     {
-        $schedule = new SpecializationSchedule($this->response);
-
-        $schedule->create();
-
         $days = [];
-        foreach ($schedule->getDays() as $day) {
+        foreach ($this->schedule->getDays() as $day) {
             $days[] = [
                 'day' => $day->getDate(),
                 'schedule' => $day->getRows(),
             ];
         }
 
-        return $this->createGroupScheduleFromDailySchedule($days, $schedule->getGroups());
+        return $this->createGroupScheduleFromDailySchedule($days, $this->schedule->getGroups());
     }
 
     private function createGroupScheduleFromDailySchedule(array $dailySchedules, array $groups): array

@@ -14,9 +14,10 @@ class SpecializationSchedule extends Schedule
     public function __construct($response)
     {
         parent::__construct($response, self::TABLE_SELECTOR);
+        $this->init();
     }
 
-    public function create(): void
+    public function init(): void
     {
         $this->extractGroups();
         $this->extractDays();
