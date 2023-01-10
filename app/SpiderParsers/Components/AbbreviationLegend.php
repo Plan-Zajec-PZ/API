@@ -13,8 +13,11 @@ class AbbreviationLegend
 
     public function __construct(
         protected Response $response,
-    ) {
-        $this->setProperties();
+    )
+    {
+        $this->rowsNode = $this->extractRowsNode();
+        $this->abbreviations = $this->extractAbbreviations();
+        $this->names = $this->extractNames();
     }
 
     public function getAbbreviations(): array
@@ -27,34 +30,28 @@ class AbbreviationLegend
         return $this->names;
     }
 
-    protected function setProperties(): void
-    {
-        $this->setRowsNode();
-        $this->setAbbreviations();
-        $this->setNames();
-    }
 
-    protected function setRowsNode(): void
+    protected function extractRowsNode(): Crawler
     {
-        $this->rowsNode = $this->response
+        return $this->response
             ->filter('#prtleg > table.TabPlan tr');
     }
 
-    protected function setAbbreviations(): void
+    protected function extractAbbreviations(): array
     {
-        $this->abbreviations = $this->rowsNode
+        return $this->rowsNode
             ->filter('td:nth-child(2n+1)')
             ->each(
-                fn (Crawler $node) => $node->text()
+                fn(Crawler $node) => $node->text()
             );
     }
 
-    protected function setNames(): void
+    protected function extractNames(): array
     {
-        $this->names = $this->rowsNode
+        return $this->rowsNode
             ->filter('td:nth-child(2n)')
             ->each(
-                fn (Crawler $node) => $node->text()
+                fn(Crawler $node) => $node->text()
             );
     }
 }
