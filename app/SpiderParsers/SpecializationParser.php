@@ -82,6 +82,6 @@ class SpecializationParser extends Parser
 
     private function addKeyToArray(array $array, string $key): array
     {
-        return array_map(fn($item) => [$key => $item], $array);
+        return array_map(fn ($item) => [$key => $item], $array);
     }
 }
