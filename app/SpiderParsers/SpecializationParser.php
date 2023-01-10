@@ -31,17 +31,13 @@ class SpecializationParser extends Parser
 
     public function parseSubjectLegends(): array
     {
-        $names = [];
-        $legends = [];
+        $results = [];
+
         foreach ($this->subjectLegends->getLegends() as $legend) {
-            $names[] = $legend->getName();
-            $legends[] = $legend->getRows();
+            $results[$legend->getName()] = $legend->getRows();
         }
 
-        return array_combine(
-            $names,
-            $legends
-        );
+        return $results;
     }
 
     public function parseGroups(): array
@@ -52,21 +48,14 @@ class SpecializationParser extends Parser
     public function parseSchedule(): array
     {
         $days = [];
+        $schedules = [];
         foreach ($this->schedule->getDays() as $day) {
-            $days[] = [
-                'day' => $day->getDate(),
-                'schedule' => $day->getRows(),
-            ];
+            $days[] = $day->getDate();
+            $schedules[] = $day->getRows();
         }
 
-        return $this->createGroupScheduleFromDailySchedule($days, $this->schedule->getGroups());
-    }
-
-    private function createGroupScheduleFromDailySchedule(array $dailySchedules, array $groups): array
-    {
+        $groups = $this->schedule->getGroups();
         $result = [];
-        $days = array_column($dailySchedules, 'day');
-        $schedules = array_column($dailySchedules, 'schedule');
 
         foreach ($groups as $group) {
             $groupSchedule = array_column($schedules, $group);
@@ -74,7 +63,7 @@ class SpecializationParser extends Parser
             $daysWithKey = $this->addKeyToArray($days, 'day');
             $groupScheduleWithKey = $this->addKeyToArray($groupSchedule, 'rows');
 
-            $result[$group] = (array_merge_recursive_distinct($daysWithKey, $groupScheduleWithKey));
+            $result[$group] = array_merge_recursive_distinct($daysWithKey, $groupScheduleWithKey);
         }
 
         return $result;
