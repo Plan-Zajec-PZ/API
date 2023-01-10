@@ -38,43 +38,63 @@ class ScrapDataCommand extends Command
 
     private function runFacultiesSpider(int $trackingNumberId): void
     {
+        $this->line('');
+        $this->line('Started scraping faculties...');
+
         Roach::collectSpider(FacultiesSpider::class, context: [
             'trackingNumberId' => $trackingNumberId,
         ]);
+
+        $this->info('Success!');
+        $this->line('');
     }
 
     private function runMajorsSpider(int $trackingNumberId): void
     {
+        $this->line('Started scraping majors...');
+
         Roach::collectSpider(MajorsSpider::class, context: [
             'trackingNumberId' => $trackingNumberId,
         ]);
+
+        $this->info('Success!');
+        $this->line('');
     }
 
     private function runMajorSchedulesSpider(int $trackingNumberId): void
     {
+        $this->line('Started scraping majors schedules...');
+
         Roach::collectSpider(MajorSchedulesSpider::class, context: [
             'trackingNumberId' => $trackingNumberId,
         ]);
+
+        $this->info('Success!');
+        $this->line('');
     }
 
     private function runLecturersSpider(int $trackingNumberId): void
     {
+        $this->line('Started scraping lecturers...');
+
         Roach::collectSpider(LecturersSpider::class, context: [
             'trackingNumberId' => $trackingNumberId,
         ]);
+
+        $this->info('Success!');
+        $this->line('');
     }
 
     private function runLecturerScheduleSpider(int $trackingNumberId): void
     {
-        $callback = function ($chunk) use ($trackingNumberId) {
-            $context = [
-                'trackingNumberId' => $trackingNumberId,
-                'models' => $chunk,
-            ];
+        $this->line('Started scraping lecturers schedules...');
 
-            Roach::collectSpider(LecturerScheduleSpider::class, context: $context);
-        };
+        Roach::collectSpider(LecturerScheduleSpider::class, context: [
+            'trackingNumberId' => $trackingNumberId,
+            'models' => Lecturer::all(),
+        ]);
 
-        Lecturer::query()->chunk(100, $callback);
+        $this->info('Success!');
+        $this->line('');
     }
 }
