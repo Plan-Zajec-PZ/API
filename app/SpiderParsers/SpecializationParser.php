@@ -50,7 +50,7 @@ class SpecializationParser extends Parser
         $days = [];
         $schedules = [];
         foreach ($this->schedule->getDays() as $day) {
-            $days[] = $day->getDate();
+            $days[] = ['day' => $day->getDate()];
             $schedules[] = $day->getRows();
         }
 
@@ -60,17 +60,14 @@ class SpecializationParser extends Parser
         foreach ($groups as $group) {
             $groupSchedule = array_column($schedules, $group);
 
-            $daysWithKey = $this->addKeyToArray($days, 'day');
-            $groupScheduleWithKey = $this->addKeyToArray($groupSchedule, 'rows');
+            $groupScheduleWithKey = array_map(
+                fn ($item) => ['rows' => $item],
+                $groupSchedule
+            );
 
-            $result[$group] = array_merge_recursive_distinct($daysWithKey, $groupScheduleWithKey);
+            $result[$group] = array_merge_recursive_distinct($days, $groupScheduleWithKey);
         }
 
         return $result;
-    }
-
-    private function addKeyToArray(array $array, string $key): array
-    {
-        return array_map(fn ($item) => [$key => $item], $array);
     }
 }
