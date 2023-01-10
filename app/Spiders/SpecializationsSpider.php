@@ -3,6 +3,8 @@
 namespace App\Spiders;
 
 use App\ItemProcessors\AbbreviationLegendsPersister;
+use App\ItemProcessors\GroupsPersister;
+use App\ItemProcessors\MajorsSchedulesPersister;
 use App\ItemProcessors\SubjectLegendsPersister;
 use App\Models\Specialization;
 use App\SpiderParsers\SpecializationParser;
@@ -20,8 +22,10 @@ class SpecializationsSpider extends BasicSpider
     ];
 
     public array $itemProcessors = [
+        GroupsPersister::class,
+        MajorsSchedulesPersister::class,
         AbbreviationLegendsPersister::class,
-        SubjectLegendsPersister::class
+        SubjectLegendsPersister::class,
     ];
 
     public array $extensions = [
@@ -52,11 +56,14 @@ class SpecializationsSpider extends BasicSpider
 
         $abbreviationLegend = $parser->parseAbbreviationLegend();
         $subjectLegends = $parser->parseSubjectLegends();
+        $schedule = $parser->parseSchedule();
 
         yield $this->item([
             'specialization_page_link' => $response->getUri(),
             'abbreviationLegend' => $abbreviationLegend,
             'subjectLegends' => $subjectLegends,
+            'groups' => $parser->parseGroups(),
+            'dailySchedules' => $schedule,
         ]);
     }
 }
