@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CronController;
 use App\Http\Controllers\LecturerController;
 use App\Http\Controllers\FacultyController;
 use App\Http\Controllers\MajorController;
@@ -16,6 +17,8 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+
+Route::post('/cron', CronController::class);
 
 Route::controller(LecturerController::class)->group(function () {
     Route::get('/lecturers', 'index')->name('lecturers.index');
