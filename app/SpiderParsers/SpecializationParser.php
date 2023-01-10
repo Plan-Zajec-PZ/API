@@ -23,7 +23,17 @@ class SpecializationParser extends Parser
     {
         $subjectLegends = new SubjectLegendsSection($this->response);
 
-        return $subjectLegends->getLegends();
+        $names = [];
+        $legends = [];
+        foreach ($subjectLegends->getLegends() as $legend) {
+            $names[] = $legend->getName();
+            $legends[] = $legend->getRows();
+        }
+
+        return array_combine(
+            $names,
+            $legends
+        );
     }
 
     public function parseGroups()
@@ -35,7 +45,7 @@ class SpecializationParser extends Parser
         return $scheduleTableNode
             ->filter('tr:first-of-type > td.nazwaSpecjalnosci')
             ->each(
-                fn (Crawler $node) => $node->text()
+                fn(Crawler $node) => $node->text()
             );
     }
 
@@ -76,6 +86,6 @@ class SpecializationParser extends Parser
 
     private function addKeyToArray(array $array, string $key): array
     {
-        return array_map(fn ($item) => [$key => $item], $array);
+        return array_map(fn($item) => [$key => $item], $array);
     }
 }
