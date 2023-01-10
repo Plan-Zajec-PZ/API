@@ -34,14 +34,14 @@ class SpecializationSchedule extends Schedule
         return $this->tableNode
             ->filter('tr:first-of-type > td.nazwaSpecjalnosci')
             ->each(
-                fn(Crawler $node) => $node->text()
+                fn (Crawler $node) => $node->text()
             );
     }
 
     protected function extractDays(): array
     {
         return $this->tableNode->filter('tr > td.nazwaDnia')->each(
-            fn(Crawler $node) => new ScheduleDay($node, $this->groups)
+            fn (Crawler $node) => new ScheduleDay($node, $this->groups)
         );
     }
 }
