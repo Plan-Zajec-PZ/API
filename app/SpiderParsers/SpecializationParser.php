@@ -44,12 +44,12 @@ class SpecializationParser extends Parser
         );
     }
 
-    public function parseGroups()
+    public function parseGroups(): array
     {
         return $this->schedule->getGroups();
     }
 
-    public function parseSchedule()
+    public function parseSchedule(): array
     {
         $days = [];
         foreach ($this->schedule->getDays() as $day) {

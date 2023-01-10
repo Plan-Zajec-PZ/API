@@ -54,16 +54,12 @@ class SpecializationsSpider extends BasicSpider
     {
         $parser = new SpecializationParser($response);
 
-        $abbreviationLegend = $parser->parseAbbreviationLegend();
-        $subjectLegends = $parser->parseSubjectLegends();
-        $schedule = $parser->parseSchedule();
-
         yield $this->item([
             'specialization_page_link' => $response->getUri(),
-            'abbreviationLegend' => $abbreviationLegend,
-            'subjectLegends' => $subjectLegends,
+            'abbreviationLegend' => $parser->parseAbbreviationLegend(),
+            'subjectLegends' => $parser->parseSubjectLegends(),
             'groups' => $parser->parseGroups(),
-            'dailySchedules' => $schedule,
+            'dailySchedules' => $parser->parseSchedule(),
         ]);
     }
 }

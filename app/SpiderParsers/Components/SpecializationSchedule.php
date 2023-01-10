@@ -8,44 +8,40 @@ class SpecializationSchedule extends Schedule
 {
     public const TABLE_SELECTOR = 'table.TabPlan';
 
-    private array $days;
     private array $groups;
+    private array $days;
 
     public function __construct($response)
     {
         parent::__construct($response, self::TABLE_SELECTOR);
-        $this->init();
+
+        $this->groups = $this->extractGroups();
+        $this->days = $this->extractDays();
     }
 
-    public function init(): void
-    {
-        $this->extractGroups();
-        $this->extractDays();
-    }
-
-    public function getDays()
+    public function getDays(): array
     {
         return $this->days;
     }
 
-    public function getGroups()
+    public function getGroups(): array
     {
         return $this->groups;
     }
 
-    protected function extractGroups(): void
+    protected function extractGroups(): array
     {
-        $this->groups = $this->tableNode
+        return $this->tableNode
             ->filter('tr:first-of-type > td.nazwaSpecjalnosci')
             ->each(
-                fn (Crawler $node) => $node->text()
+                fn(Crawler $node) => $node->text()
             );
     }
 
-    protected function extractDays(): void
+    protected function extractDays(): array
     {
-        $this->days = $this->tableNode->filter('tr > td.nazwaDnia')->each(
-            fn (Crawler $node) => new ScheduleDay($node, $this->groups)
+        return $this->tableNode->filter('tr > td.nazwaDnia')->each(
+            fn(Crawler $node) => new ScheduleDay($node, $this->groups)
         );
     }
 }
