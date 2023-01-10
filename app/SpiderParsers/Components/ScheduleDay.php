@@ -15,41 +15,40 @@ class ScheduleDay
         protected Crawler $node,
         protected array $groups
     ) {
-        $this->create();
+        $this->date = $this->extractDate();
+        $this->hoursNode = $this->extractHoursNode();
+        $this->hours = $this->extractHours();
+        $this->rows = $this->extractRows();
     }
 
-    public function create(): void
-    {
-        $this->extractDate();
-        $this->extractHours();
-        $this->extractRows();
-    }
-
-    public function getDate()
+    public function getDate(): string
     {
         return $this->date;
     }
 
-    public function getRows()
+    public function getRows(): array
     {
         return $this->rows;
     }
 
-    protected function extractDate()
+    protected function extractDate(): string
     {
-        $this->date = $this->node->text();
+        return $this->node->text();
     }
 
-    protected function extractHours()
+    protected function extractHoursNode(): Crawler
     {
-        $this->hoursNode = $this->node->closest('tr')->siblings()->children('td.godzina');
+        return $this->node->closest('tr')->siblings()->children('td.godzina');
+    }
 
-        $this->hours = $this->hoursNode->each(
+    protected function extractHours(): array
+    {
+        return $this->hoursNode->each(
             fn (Crawler $hour) => $hour->text()
         );
     }
 
-    protected function extractRows()
+    protected function extractRows(): array
     {
         $subjects = $this->hoursNode->each(
             fn (Crawler $hour) => $hour->nextAll()->each(
@@ -61,7 +60,6 @@ class ScheduleDay
             $value = array_chunk($value, 3);
         }
 
-
         $result = [];
         $schedule = array_values($subjects);
         foreach ($this->groups as $index => $group) {
@@ -69,7 +67,7 @@ class ScheduleDay
             $result[$group] = $this->addHoursToSchedule($groupSchedule);
         }
 
-        $this->rows = $result;
+        return $result;
     }
 
     private function addHoursToSchedule(array $schedule): array

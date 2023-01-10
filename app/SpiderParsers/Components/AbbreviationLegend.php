@@ -29,7 +29,6 @@ class AbbreviationLegend
         return $this->names;
     }
 
-
     protected function extractRowsNode(): Crawler
     {
         return $this->response
