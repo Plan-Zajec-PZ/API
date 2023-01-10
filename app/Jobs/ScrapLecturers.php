@@ -13,7 +13,10 @@ use RoachPHP\Roach;
 
 class ScrapLecturers implements ShouldQueue, ShouldBeUnique
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable;
+    use InteractsWithQueue;
+    use Queueable;
+    use SerializesModels;
 
     private int $trackingNumberId;
 

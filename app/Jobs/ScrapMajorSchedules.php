@@ -13,7 +13,10 @@ use RoachPHP\Roach;
 
 class ScrapMajorSchedules implements ShouldQueue, ShouldBeUnique
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable;
+    use InteractsWithQueue;
+    use Queueable;
+    use SerializesModels;
 
     private int $trackingNumberId;
 
