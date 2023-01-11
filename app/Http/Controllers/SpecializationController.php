@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\GetScheduleForSpecializationAction;
 use App\Actions\RetrieveSpecializationsAction;
 use App\Http\Resources\SpecializationResource;
 use App\Models\Major;
@@ -15,8 +16,8 @@ class SpecializationController extends Controller
         return $action->execute($major);
     }
 
-    public function show(Major $major, Specialization $specialization): SpecializationResource
+    public function show(Major $major, Specialization $specialization, GetScheduleForSpecializationAction $action): SpecializationResource
     {
-        return new SpecializationResource($specialization->load(['groups', 'abbreviationLegends', 'subjectLegends']));
+        return $action->execute($specialization);
     }
 }
