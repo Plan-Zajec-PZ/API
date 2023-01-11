@@ -16,9 +16,11 @@ class SpecializationParser extends Parser
     public function __construct(Response $response)
     {
         parent::__construct($response);
-        $this->abbreviationLegend = new AbbreviationLegend($this->response);
-        $this->subjectLegends = new SubjectLegendsSection($this->response);
-        $this->schedule = new SpecializationSchedule($this->response);
+        $this->abbreviationLegend = new AbbreviationLegend(
+            $response->filter('#prtleg > table.TabPlan tr'
+            ));
+        $this->subjectLegends = new SubjectLegendsSection($response);
+        $this->schedule = new SpecializationSchedule($response);
     }
 
     public function parseAbbreviationLegend(): array
@@ -61,7 +63,7 @@ class SpecializationParser extends Parser
             $groupSchedule = array_column($schedules, $group);
 
             $groupScheduleWithKey = array_map(
-                fn ($item) => ['rows' => $item],
+                fn($item) => ['rows' => $item],
                 $groupSchedule
             );
 
