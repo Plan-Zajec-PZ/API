@@ -24,4 +24,9 @@ class Major extends Model
     {
         return $this->hasMany(Specialization::class);
     }
+
+    public function trackingNumber(): BelongsTo
+    {
+        return $this->belongsTo(TrackingNumber::class);
+    }
 }

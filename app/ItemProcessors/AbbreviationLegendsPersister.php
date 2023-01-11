@@ -16,13 +16,18 @@ class AbbreviationLegendsPersister implements ItemProcessorInterface
     {
         $abbreviationLegendItem = $item['abbreviationLegend'];
         $specializationPageLink = $item['specialization_page_link'];
+        $trackingNumberId = $item['tracking_number_id'];
 
-        $this->persistAbbreviationLegend($abbreviationLegendItem, $specializationPageLink);
+        $this->persistAbbreviationLegend(
+            $abbreviationLegendItem,
+            $specializationPageLink,
+            $trackingNumberId,
+        );
 
         return $item;
     }
 
-    private function persistAbbreviationLegend(array $abbreviationLegendItem, string $specializationPageLink): void
+    private function persistAbbreviationLegend(array $abbreviationLegendItem, string $specializationPageLink, int $trackingNumberId): void
     {
         foreach ($abbreviationLegendItem as $abbreviation => $name) {
             $abbreviationLegend = AbbreviationLegend::query()
@@ -32,6 +37,7 @@ class AbbreviationLegendsPersister implements ItemProcessorInterface
                 ->firstWhere(['link' => $specializationPageLink]);
 
             $abbreviationLegend->specialization()->associate($specialization);
+            $abbreviationLegend->tracking_number_id = $trackingNumberId;
 
             $abbreviationLegend->save();
         }

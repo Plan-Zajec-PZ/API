@@ -16,6 +16,7 @@ class LegendPersister implements ItemProcessorInterface
     {
         $legends = $item->get('legend');
         $initiatorUri = $item->get('initiatorUri');
+        $trackingNumberId = $item->get('tracking_number_id');
 
         $schedule = $this->getSchedule($initiatorUri);
 
@@ -23,9 +24,18 @@ class LegendPersister implements ItemProcessorInterface
             $findByOrCreateWith = [
                 ...$legend,
                 'schedule_id' => $schedule->id,
+                'tracking_number_id' => $trackingNumberId,
             ];
 
-            $schedule->legends()->updateOrCreate($findByOrCreateWith, $legend);
+            $updateWith = [
+                ...$legend,
+                'tracking_number_id' => $trackingNumberId,
+            ];
+
+            $schedule->legends()->updateOrCreate(
+                $findByOrCreateWith,
+                $updateWith
+            );
         }
 
         return $item;
@@ -38,6 +48,6 @@ class LegendPersister implements ItemProcessorInterface
             ->with(['schedule' => ['legends']])
             ->firstOrFail();
 
-        return $lecturer->schedule()->firstOrCreate();
+        return $lecturer->schedule()->firstOrNew();
     }
 }

@@ -16,28 +16,39 @@ class SubjectLegendsPersister implements ItemProcessorInterface
     {
         $subjectLegends = $item['subjectLegends'];
         $specializationPageLink = $item['specialization_page_link'];
-        $this->persistSubjectLegends($subjectLegends, $specializationPageLink);
+        $trackingNumberId = $item['tracking_number_id'];
+
+        $this->persistSubjectLegends(
+            $subjectLegends,
+            $specializationPageLink,
+            $trackingNumberId,
+        );
+
         return $item;
     }
 
-    private function persistSubjectLegends(array $subjectLegends, string $specializationPageLink): void
+    private function persistSubjectLegends(array $subjectLegends, string $specializationPageLink, int $trackingNumberId): void
     {
-        if (!empty($subjectLegends)) {
-            $specialization = Specialization::query()->firstWhere([
-                'link' => $specializationPageLink,
-            ]);
-            foreach ($subjectLegends as $name => $legend) {
-                $subjectLegend = SubjectLegend::query()
-                    ->firstOrNew([
-                        'name' => $name,
-                        'content' => json_encode($legend),
-                        'specialization_id' => $specialization->id,
-                    ]);
+        if (empty($subjectLegends)) {
+            return;
+        }
 
-                $subjectLegend->specialization()->associate($specialization);
+        $specialization = Specialization::query()->firstWhere([
+            'link' => $specializationPageLink,
+        ]);
 
-                $subjectLegend->save();
-            }
+        foreach ($subjectLegends as $name => $legend) {
+            $subjectLegend = SubjectLegend::query()
+                ->firstOrNew([
+                    'name' => $name,
+                    'content' => json_encode($legend),
+                    'specialization_id' => $specialization->id,
+                ]);
+
+            $subjectLegend->specialization()->associate($specialization);
+            $subjectLegend->tracking_number_id = $trackingNumberId;
+
+            $subjectLegend->save();
         }
     }
 }

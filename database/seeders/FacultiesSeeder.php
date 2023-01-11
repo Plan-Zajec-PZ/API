@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Faculty;
+use App\Models\TrackingNumber;
 use Illuminate\Database\Seeder;
 
 class FacultiesSeeder extends Seeder
@@ -14,8 +15,11 @@ class FacultiesSeeder extends Seeder
      */
     public function run()
     {
+        $trackingNumber = TrackingNumber::factory();
+
         Faculty::factory()
             ->count(5)
+            ->for($trackingNumber)
             ->create();
     }
 }

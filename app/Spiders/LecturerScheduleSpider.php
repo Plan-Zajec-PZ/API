@@ -7,8 +7,6 @@ use App\ItemProcessors\LegendPersister;
 use App\ItemProcessors\SchedulePersister;
 use Generator;
 use RoachPHP\Downloader\Middleware\RequestDeduplicationMiddleware;
-use RoachPHP\Extensions\LoggerExtension;
-use RoachPHP\Extensions\StatsCollectorExtension;
 use RoachPHP\Http\Request;
 use RoachPHP\Http\Response;
 use RoachPHP\Spider\BasicSpider;
@@ -17,7 +15,7 @@ use Symfony\Component\DomCrawler\Crawler;
 
 class LecturerScheduleSpider extends BasicSpider
 {
-    public int $concurrency = 1;
+    public int $concurrency = 2;
 
     public int $requestDelay = 1;
 
@@ -31,8 +29,6 @@ class LecturerScheduleSpider extends BasicSpider
     ];
 
     public array $extensions = [
-        LoggerExtension::class,
-        StatsCollectorExtension::class,
     ];
 
     protected function initialRequests(): array
@@ -62,7 +58,8 @@ class LecturerScheduleSpider extends BasicSpider
         yield $this->item([
             'schedule' => array_merge(...$schedules),
             'legend' => $this->getLegend($response),
-            'initiatorUri' => $response->getRequest()->getUri(),
+            'initiatorUri' => $response->getUri(),
+            'tracking_number_id' => $this->context['trackingNumberId'],
         ]);
     }
 

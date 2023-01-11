@@ -30,9 +30,11 @@ class GroupsPersister implements ItemProcessorInterface
 
             $group->specialization()->associate($specialization);
 
+            $group->tracking_number_id = $specialization->tracking_number_id;
             $group->save();
 
-            $group->groupSchedule()->firstOrCreate();
+            $schedule = $group->groupSchedule()->firstOrNew();
+            $schedule->tracking_number_id = $group->tracking_number_id;
         }
     }
 }

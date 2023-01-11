@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\Faculty;
 use App\Models\Major;
 use App\Models\Specialization;
+use App\Models\TrackingNumber;
 use Illuminate\Database\Seeder;
 
 class MajorsSeeder extends Seeder
@@ -16,11 +17,14 @@ class MajorsSeeder extends Seeder
      */
     public function run()
     {
-        $specialization = Specialization::factory();
+        $trackingNumber = TrackingNumber::factory();
+        $faculty = Faculty::factory()->for($trackingNumber);
+        $specialization = Specialization::factory()->for($trackingNumber);
 
         Major::factory()
             ->count(5)
-            ->for(Faculty::factory())
+            ->for($trackingNumber)
+            ->for($faculty)
             ->has($specialization)
             ->create();
     }

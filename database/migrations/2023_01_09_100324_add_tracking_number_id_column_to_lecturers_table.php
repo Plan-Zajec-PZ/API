@@ -12,12 +12,8 @@ return new class () extends Migration {
      */
     public function up()
     {
-        Schema::create('specializations', function (Blueprint $table) {
-            $table->id();
-            $table->string('name', 255);
-            $table->string('link', 255)->unique();
-            $table->foreignId('major_id')->constrained()->cascadeOnDelete();
-            $table->timestamps();
+        Schema::table('lecturers', function (Blueprint $table) {
+            $table->foreignId('tracking_number_id')->constrained();
         });
     }
 
@@ -28,6 +24,8 @@ return new class () extends Migration {
      */
     public function down()
     {
-        Schema::dropIfExists('specializations');
+        Schema::table('lecturers', function (Blueprint $table) {
+            $table->dropColumn('tracking_number_id');
+        });
     }
 };

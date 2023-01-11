@@ -35,4 +35,9 @@ class Specialization extends Model
     {
         return $this->hasMany(Group::class);
     }
+
+    public function trackingNumber(): BelongsTo
+    {
+        return $this->belongsTo(TrackingNumber::class);
+    }
 }
