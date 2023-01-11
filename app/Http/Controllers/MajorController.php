@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\GetMajorAction;
 use App\Actions\RetrieveMajorsAction;
 use App\Http\Resources\MajorResource;
 use App\Models\Faculty;
@@ -15,8 +16,8 @@ class MajorController extends Controller
         return $action->execute($faculty);
     }
 
-    public function show(Faculty $faculty, Major $major): MajorResource
+    public function show(Faculty $faculty, Major $major, GetMajorAction $action): MajorResource
     {
-        return new MajorResource($major->load('specializations'));
+        return $action->execute($major);
     }
 }
