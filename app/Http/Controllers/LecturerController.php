@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Actions\RetrieveLecturersAction;
+use App\Actions\GetScheduleForLecturerAction;
 use App\Http\Requests\IndexLecturersRequest;
 use App\Http\Resources\LecturerResource;
 use App\Models\Lecturer;
@@ -16,8 +17,8 @@ class LecturerController extends Controller
         return ['data' => $action->execute($facultyId)];
     }
 
-    public function show(Lecturer $lecturer): LecturerResource
+    public function show(Lecturer $lecturer, GetScheduleForLecturerAction $action): LecturerResource
     {
-        return new LecturerResource($lecturer->load(['faculty', 'schedule']));
+        return $action->execute($lecturer);
     }
 }
