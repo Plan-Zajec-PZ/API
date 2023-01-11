@@ -27,7 +27,7 @@ class SubjectLegendsSection
         $legends = [];
 
         $this->node->each(
-            function (Crawler $node) use (&$legends){
+            function (Crawler $node) use (&$legends) {
                 $legends[] = new SubjectLegend($node);
             }
         );
