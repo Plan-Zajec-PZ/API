@@ -2,7 +2,6 @@
 
 namespace App\SpiderParsers\Components;
 
-use RoachPHP\Http\Response;
 use Symfony\Component\DomCrawler\Crawler;
 
 class SubjectLegendsSection
