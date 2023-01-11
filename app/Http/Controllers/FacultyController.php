@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\RetrieveFacultiesAction;
 use App\Http\Resources\FacultyResource;
 use App\Models\Faculty;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
 class FacultyController extends Controller
 {
-    public function index(): ResourceCollection
+    public function index(RetrieveFacultiesAction $action): ResourceCollection
     {
-        return FacultyResource::collection(Faculty::all());
+        return $action->execute();
     }
 
     public function show(Faculty $faculty): FacultyResource
