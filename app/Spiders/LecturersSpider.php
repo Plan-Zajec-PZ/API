@@ -42,6 +42,7 @@ class LecturersSpider extends BasicSpider
         $results = $faculties->each(fn (Crawler $faculty) => [
             'facultyName' => $faculty->filterXPath('//a[@href="#"]')->text(),
             'lecturers' => $this->getLecturers($faculty),
+            'tracking_number_id' => $this->context['trackingNumberId'],
         ]);
 
         yield $this->item($results);

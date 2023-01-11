@@ -41,6 +41,7 @@ class FacultiesSpider extends BasicSpider
         $results = $faculties->each(fn (Crawler $node) => [
             'name' => $node->text(),
             'link' => $node->link()->getUri(),
+            'tracking_number_id' => $this->context['trackingNumberId'],
         ]);
 
         yield $this->item($results);

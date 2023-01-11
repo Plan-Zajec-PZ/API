@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Faculty extends Model
@@ -13,6 +14,7 @@ class Faculty extends Model
     protected $fillable = [
         'name',
         'link',
+        'tracking_number_id'
     ];
 
     public function lecturers(): HasMany
@@ -23,5 +25,10 @@ class Faculty extends Model
     public function majors(): HasMany
     {
         return $this->hasMany(Major::class);
+    }
+
+    public function trackingNumber(): BelongsTo
+    {
+        return $this->belongsTo(TrackingNumber::class);
     }
 }

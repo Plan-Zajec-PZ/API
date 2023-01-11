@@ -13,10 +13,16 @@ class Legend extends Model
     protected $fillable = [
         'abbreviation',
         'fullname',
+        'tracking_number_id'
     ];
 
     public function schedule(): BelongsTo
     {
         return $this->belongsTo(Schedule::class);
+    }
+
+    public function trackingNumber(): BelongsTo
+    {
+        return $this->belongsTo(TrackingNumber::class);
     }
 }

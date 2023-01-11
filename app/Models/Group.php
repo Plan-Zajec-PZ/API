@@ -24,4 +24,9 @@ class Group extends Model
     {
         return $this->HasOne(GroupSchedule::class);
     }
+
+    public function trackingNumber(): BelongsTo
+    {
+        return $this->belongsTo(TrackingNumber::class);
+    }
 }

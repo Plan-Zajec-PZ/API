@@ -24,4 +24,9 @@ class Schedule extends Model
     {
         return $this->hasMany(Legend::class);
     }
+
+    public function trackingNumber(): BelongsTo
+    {
+        return $this->belongsTo(TrackingNumber::class);
+    }
 }

@@ -19,4 +19,9 @@ class SubjectLegend extends Model
     {
         return $this->belongsTo(Specialization::class);
     }
+
+    public function trackingNumber(): BelongsTo
+    {
+        return $this->belongsTo(TrackingNumber::class);
+    }
 }
