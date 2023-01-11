@@ -6,14 +6,14 @@ use Symfony\Component\DomCrawler\Crawler;
 
 class SubjectLegend
 {
-    protected array $rows;
     protected string $name;
+    protected array $rows;
 
     public function __construct(
         protected Crawler $node
     ) {
-        $this->initName();
-        $this->initRows();
+        $this->name = $this->extractName();
+        $this->rows = $this->extractRows();
     }
 
     public function getRows(): array
@@ -26,19 +26,22 @@ class SubjectLegend
         return $this->name;
     }
 
-    protected function initName(): void
+    protected function extractName(): string
     {
-        $this->name = $this->node->filter('tr:first-of-type > th')->text();
+        return $this->node->filter('tr:first-of-type > th')->text();
     }
 
-    protected function initRows(): void
+    protected function extractRows(): array
     {
         $content = $this->node->filter('tr:not(:nth-child(2)) > td')->each(
             fn (Crawler $node) => $node->text()
         );
 
+        $rows = [];
         foreach (array_chunk($content, 3) as $row) {
-            $this->rows[] = $row;
+            $rows[] = $row;
         }
+
+        return $rows;
     }
 }

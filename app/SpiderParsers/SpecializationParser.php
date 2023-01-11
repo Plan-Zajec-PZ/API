@@ -16,12 +16,8 @@ class SpecializationParser extends Parser
     public function __construct(Response $response)
     {
         parent::__construct($response);
-        $this->abbreviationLegend = new AbbreviationLegend(
-            $response->filter(
-                '#prtleg > table.TabPlan tr'
-            )
-        );
-        $this->subjectLegends = new SubjectLegendsSection($response);
+        $this->abbreviationLegend = new AbbreviationLegend($response->filter('#prtleg > table.TabPlan tr'));
+        $this->subjectLegends = new SubjectLegendsSection($response->filter('#prtleg + table table'));
         $this->schedule = new SpecializationSchedule($response);
     }
 

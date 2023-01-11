@@ -8,12 +8,10 @@ use Symfony\Component\DomCrawler\Crawler;
 class SubjectLegendsSection
 {
     protected array $legends = [];
-    protected Crawler $node;
 
     public function __construct(
-        protected Response $response,
+        protected Crawler $node
     ) {
-        $this->node = $response->filter('#prtleg + table table');
         $this->legends = $this->extractLegends();
     }
 
