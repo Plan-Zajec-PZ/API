@@ -15,7 +15,6 @@ use RoachPHP\Http\Request;
 use RoachPHP\Http\Response;
 use RoachPHP\Spider\BasicSpider;
 use RoachPHP\Spider\ParseResult;
-use Symfony\Component\DomCrawler\Crawler;
 
 class MajorSchedulesSpider extends BasicSpider
 {
@@ -43,7 +42,7 @@ class MajorSchedulesSpider extends BasicSpider
     {
         $requests = Specialization::all()
             ->map(
-                fn($specialization) => new Request(
+                fn ($specialization) => new Request(
                     'GET',
                     $specialization->link,
                     [$this, 'parse']
