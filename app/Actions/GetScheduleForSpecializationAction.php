@@ -2,17 +2,18 @@
 
 namespace App\Actions;
 
-use App\Models\Lecturer;
+use App\Http\Resources\SpecializationResource;
+use App\Models\Specialization;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
 
-class RetrieveLecturersAction
+class GetScheduleForSpecializationAction
 {
-    protected ?int $facultyId;
+    protected Specialization $specialization;
 
-    public function execute(?int $facultyId = null): mixed
+    public function execute(Specialization $specialization): mixed
     {
-        $this->facultyId = $facultyId;
+        $this->specialization = $specialization;
 
         return Cache::remember(
             $this->buildKey(),
@@ -23,9 +24,9 @@ class RetrieveLecturersAction
 
     private function buildKey(): string
     {
-        $entity = 'lecturers';
+        $entity = 'specialization';
         $separator = '-';
-        $selected = $this->facultyId ?? 'all';
+        $selected = $this->specialization->id;
 
         return $entity . $separator . $selected;
     }
@@ -37,12 +38,8 @@ class RetrieveLecturersAction
 
     private function buildCallback(): \Closure
     {
-        $callback = function ($query) {
-            return $query->where('faculty_id', $this->facultyId);
-        };
-
-        return fn () => Lecturer::query()
-            ->when($this->facultyId, $callback)
-            ->get(['id', 'name']);
+        return fn () => new SpecializationResource(
+            $this->specialization->load(['groups', 'abbreviationLegends', 'subjectLegends'])
+        );
     }
 }

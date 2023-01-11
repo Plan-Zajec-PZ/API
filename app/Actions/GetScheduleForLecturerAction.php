@@ -2,17 +2,18 @@
 
 namespace App\Actions;
 
+use App\Http\Resources\LecturerResource;
 use App\Models\Lecturer;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
 
-class RetrieveLecturersAction
+class GetScheduleForLecturerAction
 {
-    protected ?int $facultyId;
+    protected Lecturer $lecturer;
 
-    public function execute(?int $facultyId = null): mixed
+    public function execute(Lecturer $lecturer): LecturerResource
     {
-        $this->facultyId = $facultyId;
+        $this->lecturer = $lecturer;
 
         return Cache::remember(
             $this->buildKey(),
@@ -23,9 +24,9 @@ class RetrieveLecturersAction
 
     private function buildKey(): string
     {
-        $entity = 'lecturers';
+        $entity = 'lecturer';
         $separator = '-';
-        $selected = $this->facultyId ?? 'all';
+        $selected = $this->lecturer->id;
 
         return $entity . $separator . $selected;
     }
@@ -37,12 +38,8 @@ class RetrieveLecturersAction
 
     private function buildCallback(): \Closure
     {
-        $callback = function ($query) {
-            return $query->where('faculty_id', $this->facultyId);
-        };
-
-        return fn () => Lecturer::query()
-            ->when($this->facultyId, $callback)
-            ->get(['id', 'name']);
+        return fn () => new LecturerResource(
+            $this->lecturer->load(['faculty', 'schedule'])
+        );
     }
 }

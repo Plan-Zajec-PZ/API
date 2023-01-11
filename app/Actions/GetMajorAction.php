@@ -2,17 +2,18 @@
 
 namespace App\Actions;
 
-use App\Models\Lecturer;
+use App\Http\Resources\MajorResource;
+use App\Models\Major;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
 
-class RetrieveLecturersAction
+class GetMajorAction
 {
-    protected ?int $facultyId;
+    protected Major $major;
 
-    public function execute(?int $facultyId = null): mixed
+    public function execute(Major $major): mixed
     {
-        $this->facultyId = $facultyId;
+        $this->major = $major;
 
         return Cache::remember(
             $this->buildKey(),
@@ -23,9 +24,9 @@ class RetrieveLecturersAction
 
     private function buildKey(): string
     {
-        $entity = 'lecturers';
+        $entity = 'major';
         $separator = '-';
-        $selected = $this->facultyId ?? 'all';
+        $selected = $this->major->id;
 
         return $entity . $separator . $selected;
     }
@@ -37,12 +38,8 @@ class RetrieveLecturersAction
 
     private function buildCallback(): \Closure
     {
-        $callback = function ($query) {
-            return $query->where('faculty_id', $this->facultyId);
-        };
-
-        return fn () => Lecturer::query()
-            ->when($this->facultyId, $callback)
-            ->get(['id', 'name']);
+        return fn () => new MajorResource(
+            $this->major->load('specializations')
+        );
     }
 }
