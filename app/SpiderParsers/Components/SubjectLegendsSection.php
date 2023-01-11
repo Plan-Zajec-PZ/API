@@ -14,7 +14,7 @@ class SubjectLegendsSection
         protected Response $response,
     ) {
         $this->node = $response->filter('#prtleg + table table');
-        $this->initLegends();
+        $this->legends = $this->extractLegends();
     }
 
     public function getLegends(): array
@@ -22,12 +22,16 @@ class SubjectLegendsSection
         return $this->legends;
     }
 
-    protected function initLegends(): void
+    protected function extractLegends(): array
     {
+        $legends = [];
+
         $this->node->each(
-            function (Crawler $node) {
-                $this->legends[] = new SubjectLegend($node);
+            function (Crawler $node) use (&$legends){
+                $legends[] = new SubjectLegend($node);
             }
         );
+
+        return $legends;
     }
 }
