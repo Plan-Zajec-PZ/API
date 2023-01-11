@@ -43,6 +43,6 @@ class RetrieveLecturersAction
 
         return fn () => Lecturer::query()
             ->when($this->facultyId, $callback)
-            ->pluck('name', 'id');
+            ->get(['id', 'name']);
     }
 }

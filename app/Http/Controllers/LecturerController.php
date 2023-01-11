@@ -10,7 +10,7 @@ use App\Models\Lecturer;
 
 class LecturerController extends Controller
 {
-    public function index(IndexLecturersRequest $request, RetrieveLecturersAction $action): mixed
+    public function index(IndexLecturersRequest $request, RetrieveLecturersAction $action): array
     {
         $facultyId = $request->validated('faculty');
 
