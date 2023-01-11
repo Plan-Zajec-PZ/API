@@ -30,11 +30,15 @@ class AbbreviationLegendsPersister implements ItemProcessorInterface
     private function persistAbbreviationLegend(array $abbreviationLegendItem, string $specializationPageLink, int $trackingNumberId): void
     {
         foreach ($abbreviationLegendItem as $abbreviation => $name) {
-            $abbreviationLegend = AbbreviationLegend::query()
-                ->firstOrNew(['abbreviation' => $abbreviation, 'fullname' => $name]);
-
             $specialization = Specialization::query()
                 ->firstWhere(['link' => $specializationPageLink]);
+
+            $abbreviationLegend = AbbreviationLegend::query()
+                ->firstOrNew([
+                    'abbreviation' => $abbreviation,
+                    'fullname' => $name,
+                    'specialization_id' => $specialization->id,
+                ]);
 
             $abbreviationLegend->specialization()->associate($specialization);
             $abbreviationLegend->tracking_number_id = $trackingNumberId;

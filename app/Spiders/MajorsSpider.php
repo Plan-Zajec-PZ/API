@@ -7,7 +7,6 @@ use App\Models\Faculty;
 use App\SpiderMiddlewares\ResponseEncodingCorrection;
 use Generator;
 use RoachPHP\Downloader\Middleware\RequestDeduplicationMiddleware;
-use RoachPHP\Extensions\LoggerExtension;
 use RoachPHP\Extensions\StatsCollectorExtension;
 use RoachPHP\Http\Request;
 use RoachPHP\Http\Response;
@@ -27,7 +26,6 @@ class MajorsSpider extends BasicSpider
     ];
 
     public array $extensions = [
-        LoggerExtension::class,
         StatsCollectorExtension::class,
     ];
 
